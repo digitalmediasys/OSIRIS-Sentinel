@@ -118,6 +118,15 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
       createIcon(map, 'plane-red', '#FF3D3D', 24);
       createIcon(map, 'plane-grey', '#555555', 24);
       createDot(map, 'dot-gold', '#D4AF37', 8);
+      // Carrier icons (small dots / badges)
+      createDot(map, 'carrier-ups', '#3A5A98', 12);
+      createDot(map, 'carrier-fedex', '#4B0082', 12);
+      createDot(map, 'carrier-dhl', '#FFCC00', 12);
+      createDot(map, 'carrier-amazon', '#FF9900', 12);
+      createDot(map, 'carrier-usps', '#0033A0', 12);
+      createDot(map, 'carrier-uber', '#000000', 12);
+      createDot(map, 'carrier-ontrac', '#00AEEF', 12);
+      createDot(map, 'carrier-default', '#FFB300', 10);
       createDot(map, 'dot-red', '#FF3D3D', 10);
       createDot(map, 'dot-orange', '#FF9500', 10);
       createDot(map, 'dot-green', '#00E676', 10);
@@ -125,7 +134,7 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
       createDot(map, 'dot-cctv', '#39FF14', 10);
 
       // Sources
-      const sources = ['flights','military','jets','private-fl','satellites','earthquakes','gdelt','gps-jamming','day-night','cctv','fires','weather','infrastructure','maritime','maritime-choke','maritime-ships','live-news','sigint-news','conflict-zones', 'war-alerts-targets', 'war-alerts-lines', 'balloons', 'radiation', 'ip-sweep-devices', 'ip-sweep-pulse', 'ip-sweep-connections', 'traffic-cameras', 'home-depot', 'home-depot-trucks'];
+      const sources = ['flights','military','jets','private-fl','satellites','earthquakes','gdelt','gps-jamming','day-night','cctv','fires','weather','infrastructure','maritime','maritime-choke','maritime-ships','live-news','sigint-news','conflict-zones', 'war-alerts-targets', 'war-alerts-lines', 'balloons', 'radiation', 'ip-sweep-devices', 'ip-sweep-pulse', 'ip-sweep-connections', 'traffic-cameras', 'home-depot', 'home-depot-trucks', 'package-carriers'];
       sources.forEach(s => map.addSource(s, { type: 'geojson', data: EMPTY_FC }));
       map.on('error', (e) => {
         console.warn('[OSIRIS] Map error:', (e && (e as any).error) || e);
@@ -313,6 +322,37 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
         'text-halo-width': 1,
         'text-opacity': 0.9,
       }});
+
+      // Package carriers — filtered subset of THD trucks (UPS, FedEx, DHL, Amazon, USPS, Uber, OnTrac, etc.)
+      map.addLayer({ id: 'package-carriers-glow', type: 'circle', source: 'package-carriers', paint: {
+        'circle-radius': ['interpolate',['linear'],['zoom'], 1,4, 5,7, 10,10, 14,16],
+        'circle-color': '#FFB300',
+        'circle-opacity': 0.12,
+        'circle-blur': 1,
+      }});
+      map.addLayer({ id: 'package-carriers-dots', type: 'circle', source: 'package-carriers', paint: {
+        'circle-radius': ['interpolate',['linear'],['zoom'], 1,3, 5,5, 10,7, 14,10],
+        'circle-color': '#FFB300',
+        'circle-opacity': 0.98,
+        'circle-stroke-width': 1,
+        'circle-stroke-color': '#FFFFFF',
+        'circle-stroke-opacity': 0.85,
+      }});
+      map.addLayer({ id: 'package-carriers-label', type: 'symbol', source: 'package-carriers', minzoom: 9, layout: {
+        'text-field': ['get', 'carrier'],
+        'text-size': 10,
+        'text-font': ['Open Sans Regular'],
+        'text-offset': [0, 1.2],
+        'text-allow-overlap': false,
+      }, paint: {
+        'text-color': '#000000', 'text-halo-color': '#FFD700', 'text-halo-width': 1, 'text-opacity': 0.95,
+      }});
+      map.addLayer({ id: 'package-carriers-icons', type: 'symbol', source: 'package-carriers', layout: {
+        'icon-image': ['coalesce', ['get', 'icon'], 'carrier-default'],
+        'icon-size': ['interpolate',['linear'],['zoom'], 5,0.6,10,1,14,1.4],
+        'icon-allow-overlap': true,
+        'icon-ignore-placement': true,
+      }, paint: { 'icon-opacity': 0.95 } });
 
       // GDELT
       map.addLayer({ id: 'gdelt-dots', type: 'circle', source: 'gdelt', paint: {
@@ -637,6 +677,23 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
         </div>
       </div>`);
       map.flyTo({ center: coords, zoom: Math.max(map.getZoom(), 10), duration: 900 });
+    });
+
+    // ── Package carriers popup (highlighted delivery vehicles)
+    map.on('click', 'package-carriers-dots', e => {
+      if (!e.features?.length) return;
+      const p = e.features[0].properties as any;
+      const coords = (e.features[0].geometry as any).coordinates;
+      popup(coords, `<div style="${pStyle}border:1px solid rgba(255,179,0,0.25);">
+        <div style="color:#FFB300;font-size:13px;font-weight:700;margin-bottom:8px;">${p.name}</div>
+        <div style="font-size:10px;color:#E8E6E0;margin-bottom:6px;">${p.carrier} — ${p.city || ''}, ${p.state || ''}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:9px;">
+          <div><span style="color:#5C5A54;">CARRIER</span><br/><span style="color:#FFB300;">${p.carrier}</span></div>
+          <div><span style="color:#5C5A54;">ASN</span><br/><span style="color:#E8E6E0;">${p.asn}</span></div>
+        </div>
+      </div>`);
+      map.flyTo({ center: coords, zoom: Math.max(map.getZoom(), 12), duration: 900 });
+      onEntityClick?.(p);
     });
 
     // ── Earthquakes (with USGS link) ──
@@ -999,6 +1056,34 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
       },
     })) : []);
   }, [mapReady, data.home_depot_trucks, activeLayers.home_depot_trucks, setGeo]);
+
+  useEffect(() => {
+    if (!mapReady) return;
+    const pkgRe = /(ups|fedex|dhl|amazon|uber|ontrac|postmates|usps|xpo|old dominion|yrc|estes|j\.b\. hunt)/i;
+    const detectIcon = (carrier: string) => {
+      const c = (carrier||'').toLowerCase();
+      if (/ups/.test(c)) return 'carrier-ups';
+      if (/fedex/.test(c)) return 'carrier-fedex';
+      if (/dhl/.test(c)) return 'carrier-dhl';
+      if (/amazon/.test(c)) return 'carrier-amazon';
+      if (/usps/.test(c)) return 'carrier-usps';
+      if (/uber/.test(c)) return 'carrier-uber';
+      if (/ontrac/.test(c)) return 'carrier-ontrac';
+      return 'carrier-default';
+    };
+    const features = (activeLayers.package_carriers && data.home_depot_trucks ? data.home_depot_trucks.filter((loc: any) => loc.carrier && pkgRe.test(loc.carrier)).map((location: any) => ({
+      type: 'Feature', geometry: { type: 'Point', coordinates: [location.lng, location.lat] }, properties: {
+        name: location.name,
+        carrier: location.carrier,
+        asn: location.asn,
+        city: location.city,
+        state: location.state,
+        country: location.country,
+        icon: detectIcon(location.carrier),
+      },
+    })) : []);
+    setGeo('package-carriers', features as any[]);
+  }, [mapReady, data.home_depot_trucks, activeLayers.package_carriers, setGeo]);
 
   useEffect(() => {
     if (!mapReady) return;

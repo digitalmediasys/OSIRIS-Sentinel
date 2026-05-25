@@ -7,6 +7,7 @@ import {
   Shield, Sun, AlertTriangle, Camera, Flame, Target,
   CloudLightning, Radiation, Tv, Anchor, Ship, Newspaper,
   Building2, ChevronDown, ChevronUp, ToggleLeft, ToggleRight, Navigation,
+  Truck,
 } from 'lucide-react';
 
 interface LayerPanelProps {
@@ -43,6 +44,7 @@ const LAYER_GROUPS = [
     layers: [
       { key: 'home_depot', label: 'THD Stores & DCs', icon: Building2, color: '#FF6B00', dataKey: 'home_depot_locations' },
       { key: 'home_depot_trucks', label: 'THD Carrier Trucks', icon: Building2, color: '#7C4DFF', dataKey: 'home_depot_trucks' },
+      { key: 'package_carriers', label: 'Package Carriers', icon: Truck, color: '#FFB300', dataKey: 'home_depot_trucks' },
     ],
   },
   {
