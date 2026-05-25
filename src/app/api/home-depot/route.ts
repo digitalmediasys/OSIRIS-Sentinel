@@ -67,18 +67,35 @@ export async function GET(request: Request) {
       `);\n` +
       `out center qt;`;
 
-    const response = await fetch('https://overpass.openstreetmap.fr/api/interpreter', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
-      body: `data=${encodeURIComponent(query)}`,
-      signal: AbortSignal.timeout(30000),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Overpass API returned status ${response.status}`);
+    const endpoints = [
+      'https://overpass.openstreetmap.fr/api/interpreter',
+      'https://overpass-api.de/api/interpreter',
+      'https://overpass.kumi.systems/api/interpreter',
+    ];
+    let json: any = null;
+    let lastErr: Error | null = null;
+    for (const ep of endpoints) {
+      try {
+        const resp = await fetch(ep, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+          body: `data=${encodeURIComponent(query)}`,
+          signal: AbortSignal.timeout(30000),
+        });
+        if (!resp.ok) {
+          lastErr = new Error(`Overpass endpoint ${ep} returned status ${resp.status}`);
+          continue;
+        }
+        json = await resp.json();
+        break;
+      } catch (err) {
+        lastErr = err as Error;
+        continue;
+      }
     }
-
-    const json = await response.json();
+    if (!json) {
+      throw lastErr || new Error('All Overpass endpoints failed');
+    }
     const elements = Array.isArray(json.elements) ? json.elements as OverpassElement[] : [];
     const locations = elements
       .map(elementToLocation)
