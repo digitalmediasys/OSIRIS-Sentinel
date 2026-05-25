@@ -11,7 +11,7 @@ const DEFENSE_STOCKS = ['RTX', 'LMT', 'NOC', 'GD', 'BA', 'PLTR'];
 const OIL_TICKERS = ['CL=F', 'BZ=F'];
 const COMMODITY_TICKERS = ['GC=F', 'SI=F', 'HG=F', 'NG=F', 'ZW=F', 'ZC=F'];
 const CRYPTO_TICKERS = ['BTC-USD', 'ETH-USD'];
-const INDEX_TICKERS = ['ES=F', 'NQ=F'];
+const INDEX_TICKERS = ['ES=F', 'NQ=F', 'HD'];
 
 // Yahoo Finance v8 chart API
 async function fetchYahoo(symbol: string): Promise<any | null> {
@@ -104,7 +104,7 @@ const COMMODITY_NAMES: Record<string, string> = {
 };
 const OIL_NAMES: Record<string, string> = { 'CL=F': 'WTI Crude', 'BZ=F': 'Brent Crude' };
 const CRYPTO_NAMES: Record<string, string> = { 'BTC-USD': 'Bitcoin', 'ETH-USD': 'Ethereum' };
-const INDEX_NAMES: Record<string, string> = { 'ES=F': 'S&P 500', 'NQ=F': 'Nasdaq 100' };
+const INDEX_NAMES: Record<string, string> = { 'ES=F': 'S&P 500', 'NQ=F': 'Nasdaq 100', 'HD': 'Home Depot (HD)' };
 
 export async function GET() {
   try {
