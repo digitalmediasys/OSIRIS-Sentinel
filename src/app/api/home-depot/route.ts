@@ -53,15 +53,17 @@ export async function GET(request: Request) {
     const url = new URL(request.url);
     const max = Math.min(Math.max(Number(url.searchParams.get('max') || '3000'), 10), 3000);
 
+    const brandRegex = `(?i)\\b(?:the\\s+)?home[_ ]?depot\\b`;
     const query = `[out:json][timeout:60];\n` +
       `area["ISO3166-1"="US"][admin_level=2]->.searchArea;\n` +
       `(` +
-      `node(area.searchArea)["brand"~"(?i)Home Depot"];\n` +
-      `way(area.searchArea)["brand"~"(?i)Home Depot"];\n` +
-      `relation(area.searchArea)["brand"~"(?i)Home Depot"];\n` +
-      `node(area.searchArea)["name"~"(?i)Home Depot"];\n` +
-      `way(area.searchArea)["name"~"(?i)Home Depot"];\n` +
-      `relation(area.searchArea)["name"~"(?i)Home Depot"];\n` +
+      `node(area.searchArea)["brand"~"${brandRegex}"];\n` +
+      `way(area.searchArea)["brand"~"${brandRegex}"];\n` +
+      `relation(area.searchArea)["brand"~"${brandRegex}"];\n` +
+      `node(area.searchArea)["name"~"${brandRegex}"];\n` +
+      `way(area.searchArea)["name"~"${brandRegex}"];\n` +
+      `relation(area.searchArea)["name"~"${brandRegex}"];\n` +
+      `node(area.searchArea)["shop"="doityourself"]["name"~"${brandRegex}"];\n` +
       `);\n` +
       `out center qt;`;
 
