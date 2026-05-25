@@ -1,4 +1,4 @@
-export interface HomeDepotTruckLocation {
+export interface THDTruckLocation {
   id: string;
   name: string;
   carrier: string;
@@ -10,7 +10,7 @@ export interface HomeDepotTruckLocation {
   lng: number;
 }
 
-export const HOME_DEPOT_TRUCK_LOCATIONS: HomeDepotTruckLocation[] = [
+export const THD_TRUCK_LOCATIONS: THDTruckLocation[] = [
   {
     id: 'fallback-ups-louisville',
     name: 'UPS Logistics Hub',

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { HOME_DEPOT_LOCATIONS } from '@/lib/home-depot-locations';
+import { THD_LOCATIONS } from '@/lib/home-depot-locations';
 
 interface OverpassElement {
   type: string;
@@ -29,7 +29,7 @@ function elementToLocation(el: OverpassElement) {
   const lon = el.lon ?? el.center?.lon;
   if (lat == null || lon == null) return null;
   const tags = el.tags || {};
-  const name = normalizeString(tags.name || tags.brand || 'Home Depot');
+  const name = normalizeString(tags.name || tags.brand || 'THD');
   const state = normalizeString(tags['addr:state'] || tags['addr:province'] || '');
   const city = normalizeString(tags['addr:city'] || tags['addr:place'] || '');
   const country = normalizeString(tags['addr:country'] || 'USA');
@@ -88,12 +88,12 @@ export async function GET(request: Request) {
       .slice(0, max);
 
     if (locations.length === 0) {
-      return NextResponse.json({ locations: HOME_DEPOT_LOCATIONS, source: 'fallback' });
+      return NextResponse.json({ locations: THD_LOCATIONS, source: 'fallback' });
     }
 
     return NextResponse.json({ locations, source: 'openstreetmap' });
   } catch (error) {
-    console.error('Home Depot Overpass fetch failed:', error);
-    return NextResponse.json({ locations: HOME_DEPOT_LOCATIONS, source: 'fallback', error: (error as Error).message }, { status: 200 });
+    console.error('THD Overpass fetch failed:', error);
+    return NextResponse.json({ locations: THD_LOCATIONS, source: 'fallback', error: (error as Error).message }, { status: 200 });
   }
 }

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { HOME_DEPOT_TRUCK_LOCATIONS, HomeDepotTruckLocation } from '@/lib/home-depot-trucks';
+import { THD_TRUCK_LOCATIONS, THDTruckLocation } from '@/lib/home-depot-trucks';
 
 interface OverpassElement {
   type: string;
@@ -38,7 +38,7 @@ function lookupAsn(carrier: string) {
   return ASN_LOOKUP[carrier.toLowerCase()] || 'ASN UNKNOWN';
 }
 
-function elementToTruck(el: OverpassElement): HomeDepotTruckLocation | null {
+function elementToTruck(el: OverpassElement): THDTruckLocation | null {
   const lat = el.lat ?? el.center?.lat;
   const lon = el.lon ?? el.center?.lon;
   if (lat == null || lon == null) return null;
@@ -102,12 +102,12 @@ export async function GET(request: Request) {
       .slice(0, max);
 
     if (locations.length === 0) {
-      return NextResponse.json({ locations: HOME_DEPOT_TRUCK_LOCATIONS, source: 'fallback' });
+      return NextResponse.json({ locations: THD_TRUCK_LOCATIONS, source: 'fallback' });
     }
 
     return NextResponse.json({ locations, source: 'openstreetmap' });
   } catch (error) {
-    console.error('Home Depot truck fetch failed:', error);
-    return NextResponse.json({ locations: HOME_DEPOT_TRUCK_LOCATIONS, source: 'fallback', error: (error as Error).message }, { status: 200 });
+    console.error('THD truck fetch failed:', error);
+    return NextResponse.json({ locations: THD_TRUCK_LOCATIONS, source: 'fallback', error: (error as Error).message }, { status: 200 });
   }
 }

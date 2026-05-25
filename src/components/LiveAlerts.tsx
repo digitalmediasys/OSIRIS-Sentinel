@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ChevronDown, ChevronUp, MapPin, ExternalLink, AlertTriangle,
-  Newspaper, Clock, Radio,
+  Newspaper, Clock, Radio, Truck,
 } from 'lucide-react';
 
 interface LiveAlertsProps {
@@ -23,7 +23,7 @@ const RISK_COLORS: Record<string, string> = {
 
 export default function LiveAlerts({ data, onLocate, onWatchFeed }: LiveAlertsProps) {
   const [expanded, setExpanded] = useState(true);
-  const [filter, setFilter] = useState<'all' | 'news' | 'quakes' | 'feeds'>('all');
+  const [filter, setFilter] = useState<'all' | 'news' | 'quakes' | 'feeds' | 'supply'>('all');
 
   // Built-in live feeds — verified video IDs (synced with /api/live-news)
   const BUILTIN_FEEDS = [
@@ -86,6 +86,14 @@ export default function LiveAlerts({ data, onLocate, onWatchFeed }: LiveAlertsPr
     });
   }
 
+  // Supply chain disruptions (maritime chokepoints / trade routes)
+  const SUPPLY_CHAIN_ALERTS = [
+    { title: 'Suez Canal supply chain disruption', source: 'Maritime chokepoint', lat: 30.43, lng: 32.34, severity: 'CRITICAL' },
+    { title: 'Strait of Hormuz supply chain disruption', source: 'Maritime chokepoint', lat: 26.57, lng: 56.25, severity: 'HIGH' },
+    { title: 'Strait of Malacca supply chain disruption', source: 'Maritime chokepoint', lat: 2.50, lng: 101.50, severity: 'ELEVATED' },
+  ];
+  SUPPLY_CHAIN_ALERTS.forEach(alert => alerts.push({ type: 'supply', ...alert }));
+
   // Built-in live feeds (always present)
   BUILTIN_FEEDS.forEach(f => {
     alerts.push({
@@ -99,6 +107,7 @@ export default function LiveAlerts({ data, onLocate, onWatchFeed }: LiveAlertsPr
   const filtered = filter === 'all' ? alerts :
     filter === 'news' ? alerts.filter(a => a.type === 'news') :
     filter === 'quakes' ? alerts.filter(a => a.type === 'quake') :
+    filter === 'supply' ? alerts.filter(a => a.type === 'supply') :
     alerts.filter(a => a.type === 'feed');
 
   const getIcon = (type: string) => {
@@ -106,6 +115,7 @@ export default function LiveAlerts({ data, onLocate, onWatchFeed }: LiveAlertsPr
       case 'news': return Newspaper;
       case 'quake': return AlertTriangle;
       case 'feed': return Radio;
+      case 'supply': return Truck;
       default: return Newspaper;
     }
   };
@@ -124,7 +134,7 @@ export default function LiveAlerts({ data, onLocate, onWatchFeed }: LiveAlertsPr
         <div className="flex items-center gap-2">
           <Radio className="w-3.5 h-3.5 text-[#FF4081]" />
           <span className="hud-text text-[10px] text-[var(--text-primary)]">LIVE ALERTS</span>
-          <span className="gotham-tag gotham-tag--high" style={{ fontSize: '7px', padding: '1px 5px' }}>{alerts.filter(a => a.type === 'news' || a.type === 'quake').length}</span>
+          <span className="gotham-tag gotham-tag--high" style={{ fontSize: '7px', padding: '1px 5px' }}>{alerts.filter(a => a.type !== 'feed').length}</span>
           <span className="gotham-tag gotham-tag--info" style={{ fontSize: '7px', padding: '1px 4px' }}>{BUILTIN_FEEDS.length} FEEDS</span>
         </div>
         <div className="flex items-center gap-2">
@@ -144,7 +154,7 @@ export default function LiveAlerts({ data, onLocate, onWatchFeed }: LiveAlertsPr
           >
             {/* Filters */}
             <div className="flex gap-1 mb-2">
-              {(['all', 'news', 'quakes', 'feeds'] as const).map(f => (
+              {(['all', 'news', 'quakes', 'supply', 'feeds'] as const).map(f => (
                 <button
                   key={f}
                   onClick={() => setFilter(f)}

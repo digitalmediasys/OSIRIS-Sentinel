@@ -254,7 +254,7 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
         'text-offset': [0, 1.6], 'text-max-width': 11, 'text-allow-overlap': false,
       }, paint: { 'text-color': '#FF8C00', 'text-halo-color': '#000', 'text-halo-width': 1, 'text-opacity': 0.65 }});
 
-      // Home Depot Stores & Distribution Centers
+      // THD Stores & Distribution Centers
       map.addLayer({ id: 'home-depot-glow', type: 'circle', source: 'home-depot', paint: {
         'circle-radius': ['interpolate',['linear'],['zoom'], 1,4, 5,8, 10,12, 14,18],
         'circle-color': '#9C27B0',
@@ -283,7 +283,7 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
         'text-opacity': 0.95,
       }});
 
-      // Home Depot carrier trucks / ASN logistics
+      // THD carrier trucks / ASN logistics
       map.addLayer({ id: 'home-depot-trucks-glow', type: 'circle', source: 'home-depot-trucks', paint: {
         'circle-radius': ['interpolate',['linear'],['zoom'], 1,4, 5,7, 10,10, 14,16],
         'circle-color': '#7C4DFF',
@@ -607,7 +607,7 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
       map.flyTo({ center: coords, zoom: Math.max(map.getZoom(), 12), duration: 1000 });
     });
 
-    // ── Home Depot locations popup
+    // ── THD locations popup
     map.on('click', 'home-depot-dots', e => {
       if (!e.features?.length) return;
       const p = e.features[0].properties as any;
@@ -623,7 +623,7 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
       map.flyTo({ center: coords, zoom: Math.max(map.getZoom(), 10), duration: 900 });
     });
 
-    // ── Home Depot carrier trucks popup
+    // ── THD carrier trucks popup
     map.on('click', 'home-depot-trucks-dots', e => {
       if (!e.features?.length) return;
       const p = e.features[0].properties as any;

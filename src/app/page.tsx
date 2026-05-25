@@ -14,7 +14,7 @@ import ViewPresets from '@/components/ViewPresets';
 import KeyboardShortcuts from '@/components/KeyboardShortcuts';
 import GlobalStatusBar from '@/components/GlobalStatusBar';
 import LiveAlerts from '@/components/LiveAlerts';
-import { HOME_DEPOT_LOCATIONS } from '@/lib/home-depot-locations';
+import { THD_LOCATIONS } from '@/lib/home-depot-locations';
 
 const OsirisMap = dynamic(() => import('@/components/OsirisMap'), { ssr: false });
 const LayerPanel = dynamic(() => import('@/components/LayerPanel'));
@@ -142,11 +142,11 @@ export default function Dashboard() {
     return () => clearTimeout(splashTimer);
   }, []);
 
-  // Load Home Depot static locations
+  // Load THD static locations
   useEffect(() => {
     dataRef.current = {
       ...dataRef.current,
-      home_depot_locations: HOME_DEPOT_LOCATIONS,
+      home_depot_locations: THD_LOCATIONS,
     };
     setDataVersion(v => v + 1);
   }, []);
@@ -355,12 +355,12 @@ export default function Dashboard() {
       fetchEndpoint('/api/infrastructure', d => ({ infrastructure: d.infrastructure }));
       layerFetchedRef.current.add('infrastructure');
     }
-    // Home Depot locations (public OpenStreetMap data)
+    // THD locations (public OpenStreetMap data)
     if (activeLayers.home_depot && !layerFetchedRef.current.has('home_depot')) {
       fetchEndpoint('/api/home-depot', d => ({ home_depot_locations: d.locations }));
       layerFetchedRef.current.add('home_depot');
     }
-    // Home Depot carrier trucks / ASN logistics
+    // THD carrier trucks / ASN logistics
     if (activeLayers.home_depot_trucks && !layerFetchedRef.current.has('home_depot_trucks')) {
       fetchEndpoint('/api/home-depot-trucks', d => ({ home_depot_trucks: d.locations }));
       layerFetchedRef.current.add('home_depot_trucks');
