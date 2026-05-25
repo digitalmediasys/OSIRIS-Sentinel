@@ -10,7 +10,7 @@ interface OverpassElement {
   tags?: Record<string, string>;
 }
 
-const CARRIER_PATTERNS = /ups|fedex|xpo|old dominion|yrc|estes|j\.b\. hunt/i;
+const CARRIER_PATTERNS = /ups|fedex|xpo|old dominion|yrc|estes|j\.b\. hunt|dhl|amazon|amazon logistics|uber|uber freight|uberfreight|ontrac|postmates|usps/i;
 const ASN_LOOKUP: Record<string, string> = {
   ups: 'AS14618',
   fedex: 'AS702',
@@ -19,6 +19,14 @@ const ASN_LOOKUP: Record<string, string> = {
   yrc: 'AS1758',
   estes: 'AS15735',
   'j.b. hunt': 'AS31513',
+  dhl: 'ASN UNKNOWN',
+  amazon: 'AS16509',
+  'amazon logistics': 'AS16509',
+  uber: 'ASN UNKNOWN',
+  'uber freight': 'ASN UNKNOWN',
+  ontrac: 'ASN UNKNOWN',
+  postmates: 'ASN UNKNOWN',
+  usps: 'ASN UNKNOWN',
 };
 
 function normalize(value?: string | null) {
