@@ -1,0 +1,61 @@
+
+> osiris@0.1.0 build
+> next build
+
+▲ Next.js 16.2.6 (Turbopack)
+
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+✓ Compiled successfully in 11.7s
+  Skipping validation of types
+  Finished TypeScript config validation in 33ms ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/32) ...
+  Generating static pages using 11 workers (8/32) 
+  Generating static pages using 11 workers (16/32) 
+  Generating static pages using 11 workers (24/32) 
+✓ Generating static pages using 11 workers (32/32) in 902ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /api/air-quality
+├ ƒ /api/cctv
+├ ƒ /api/cctv/stream-status
+├ ƒ /api/country-risk
+├ ƒ /api/cyber-threats
+├ ƒ /api/earthquakes
+├ ƒ /api/fires
+├ ƒ /api/flights
+├ ƒ /api/frontlines
+├ ƒ /api/gdelt
+├ ƒ /api/health
+├ ƒ /api/home-depot
+├ ƒ /api/infrastructure
+├ ƒ /api/live-news
+├ ƒ /api/maritime
+├ ƒ /api/markets
+├ ƒ /api/news
+├ ƒ /api/osint/bgp
+├ ƒ /api/osint/certs
+├ ƒ /api/osint/cve
+├ ƒ /api/osint/dns
+├ ƒ /api/osint/ip
+├ ƒ /api/osint/sweep
+├ ƒ /api/osint/threats
+├ ƒ /api/osint/whois
+├ ƒ /api/region-dossier
+├ ƒ /api/satellites
+├ ƒ /api/scanner
+├ ƒ /api/sentinel
+├ ƒ /api/space-weather
+├ ƒ /api/traffic-cameras
+└ ƒ /api/weather
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
