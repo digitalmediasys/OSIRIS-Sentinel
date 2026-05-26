@@ -1,13 +1,49 @@
 const fs = require('fs');
 const path = require('path');
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 
 // Scrape Home Depot official store-locator page and extract store locations.
 // Saves output to src/lib/home-depot-stores.json
 
 async function scrape() {
   const url = 'https://www.homedepot.com/l/store-locator';
-  const browser = await puppeteer.launch({ headless: true });
+  // find system Chrome/Chromium/Edge
+  function findChrome() {
+    const envPath = process.env.CHROME_PATH || process.env.CHROMIUM_PATH || process.env.BROWSER_PATH;
+    if (envPath && fs.existsSync(envPath)) return envPath;
+    const platform = process.platform;
+    const candidates = [];
+    if (platform === 'win32') {
+      const prog = process.env['ProgramFiles'] || 'C:\\Program Files';
+      const progx86 = process.env['ProgramFiles(x86)'] || 'C:\\Program Files (x86)';
+      const local = process.env['LocalAppData'] || (process.env.USERPROFILE ? path.join(process.env.USERPROFILE, 'AppData', 'Local') : null);
+      candidates.push(path.join(prog, 'Google', 'Chrome', 'Application', 'chrome.exe'));
+      candidates.push(path.join(progx86, 'Google', 'Chrome', 'Application', 'chrome.exe'));
+      if (local) candidates.push(path.join(local, 'Google', 'Chrome', 'Application', 'chrome.exe'));
+      candidates.push(path.join(prog, 'Microsoft', 'Edge', 'Application', 'msedge.exe'));
+      candidates.push(path.join(progx86, 'Microsoft', 'Edge', 'Application', 'msedge.exe'));
+    } else if (platform === 'darwin') {
+      candidates.push('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome');
+      candidates.push('/Applications/Chromium.app/Contents/MacOS/Chromium');
+      candidates.push('/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge');
+    } else {
+      candidates.push('/usr/bin/google-chrome-stable');
+      candidates.push('/usr/bin/google-chrome');
+      candidates.push('/usr/bin/chromium-browser');
+      candidates.push('/usr/bin/chromium');
+      candidates.push('/snap/bin/chromium');
+    }
+    for (const c of candidates) {
+      try { if (c && fs.existsSync(c)) return c; } catch (e) {}
+    }
+    return null;
+  }
+
+  const chromePath = findChrome();
+  if (!chromePath) {
+    throw new Error('No system Chrome/Chromium found. Set CHROME_PATH environment variable to your browser executable path or install Chrome.');
+  }
+  const browser = await puppeteer.launch({ headless: 'new', executablePath: chromePath });
   const page = await browser.newPage();
   await page.setUserAgent('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36');
 
