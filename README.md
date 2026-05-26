@@ -1,6 +1,6 @@
 <div align="center">
 
-# ⬡ OSIRIS
+# ⬡ SENTINEL
 
 ### Open Source Intelligence & Reconnaissance Integrated System
 
@@ -20,7 +20,7 @@
 
 ## Overview
 
-Osiris is a production-grade OSINT platform that provides situational awareness across multiple intelligence domains. Built with Next.js 16 and MapLibre GL, every data point is rendered via WebGL for 60fps performance even with thousands of concurrent entities on-screen.
+Sentinel is a production-grade OSINT platform that provides situational awareness across multiple intelligence domains. Built with Next.js 16 and MapLibre GL, every data point is rendered via WebGL for 60fps performance even with thousands of concurrent entities on-screen.
 
 ### Key Capabilities
 
@@ -43,7 +43,7 @@ Osiris is a production-grade OSINT platform that provides situational awareness 
 
 ```
 ┌─────────────────────────────────────────────────┐
-│                  OSIRIS CLIENT                   │
+│                 SENTINEL CLIENT                 │
 │  ┌──────────┐  ┌──────────┐  ┌───────────────┐ │
 │  │ MapLibre  │  │  HUD     │  │  RECON Toolkit│ │
 │  │  GL (GPU) │  │ Panels   │  │  Port Scan    │ │
