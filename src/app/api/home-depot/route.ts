@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { THD_LOCATIONS } from '@/lib/home-depot-locations';
+import fs from 'fs';
+import path from 'path';
 
 interface OverpassElement {
   type: string;
@@ -105,6 +107,42 @@ export async function GET(request: Request) {
         return all.findIndex(item => `${item.lat.toFixed(6)}:${item.lng.toFixed(6)}:${item.name.toLowerCase()}` === key) === index;
       })
       .slice(0, max);
+
+    // Try to load local generated Home Depot stores JSON and merge (server-side only)
+    try {
+      const jsonPath = path.join(process.cwd(), 'src', 'lib', 'home-depot-stores.json');
+      if (fs.existsSync(jsonPath)) {
+        const raw = fs.readFileSync(jsonPath, 'utf8');
+        const parsed = JSON.parse(raw);
+        const localStores = Array.isArray(parsed?.stores) ? parsed.stores.map((s: any, i: number) => ({
+          id: s.id ?? `local-${i}`,
+          name: s.name ?? 'Home Depot',
+          type: s.type ?? 'Store',
+          city: s.city ?? '',
+          state: s.state ?? '',
+          country: s.country ?? 'USA',
+          lat: Number(s.lat),
+          lng: Number(s.lng),
+          source: 'local-json',
+          tags: s.tags ?? {},
+        })) : [];
+
+        if (localStores.length > 0) {
+          // merge and de-duplicate with OSM results
+          const combined = [...locations];
+          for (const ls of localStores) {
+            const key = `${ls.lat.toFixed(6)}:${ls.lng.toFixed(6)}:${(ls.name||'').toLowerCase()}`;
+            const exists = combined.find(item => `${item.lat.toFixed(6)}:${item.lng.toFixed(6)}:${item.name.toLowerCase()}` === key);
+            if (!exists) combined.push(ls as any);
+          }
+          // limit to max
+          const final = combined.slice(0, max);
+          return NextResponse.json({ locations: final, source: 'combined' });
+        }
+      }
+    } catch (err) {
+      console.warn('Failed to read local home-depot-stores.json:', (err as Error).message);
+    }
 
     if (locations.length === 0) {
       return NextResponse.json({ locations: THD_LOCATIONS, source: 'fallback' });
