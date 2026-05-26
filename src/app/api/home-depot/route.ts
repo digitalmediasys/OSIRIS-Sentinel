@@ -96,6 +96,31 @@ export async function GET(request: Request) {
       }
     }
     if (!json) {
+      // All Overpass endpoints failed — try loading local generated stores JSON as a fallback
+      try {
+        const jsonPathFallback = path.join(process.cwd(), 'src', 'lib', 'home-depot-stores.json');
+        if (fs.existsSync(jsonPathFallback)) {
+          const rawLocal = fs.readFileSync(jsonPathFallback, 'utf8');
+          const parsedLocal = JSON.parse(rawLocal);
+          const localStores = Array.isArray(parsedLocal?.stores) ? parsedLocal.stores.map((s: any, i: number) => ({
+            id: s.id ?? `local-${i}`,
+            name: s.name ?? 'Home Depot',
+            type: s.type ?? 'Store',
+            city: s.city ?? '',
+            state: s.state ?? '',
+            country: s.country ?? 'USA',
+            lat: Number(s.lat),
+            lng: Number(s.lng),
+            source: 'local-json',
+            tags: s.tags ?? {},
+          })) : [];
+          if (localStores.length > 0) {
+            return NextResponse.json({ locations: localStores, source: 'local-json' });
+          }
+        }
+      } catch (err) {
+        console.warn('Failed to load local home-depot-stores.json fallback:', (err as Error).message);
+      }
       throw lastErr || new Error('All Overpass endpoints failed');
     }
     const elements = Array.isArray(json.elements) ? json.elements as OverpassElement[] : [];
