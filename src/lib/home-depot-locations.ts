@@ -57,4 +57,5 @@ export const THD_LOCATIONS: THDLocation[] = [
   { name: 'THD Distribution Center - Stockton, CA', type: 'Distribution Center', city: 'Stockton', state: 'CA', country: 'USA', lat: 37.9619, lng: -121.2853 },
   { name: 'THD Distribution Center - Norfolk, VA', type: 'Distribution Center', city: 'Norfolk', state: 'VA', country: 'USA', lat: 36.8959, lng: -76.2083 },
   { name: 'THD Distribution Center - Reno, NV', type: 'Distribution Center', city: 'Reno', state: 'NV', country: 'USA', lat: 39.4738, lng: -119.7688 },
+  { name: 'THD FDC/BDC Detroit - Warren, MI', type: 'Distribution Center', city: 'Warren', state: 'MI', country: 'USA', lat: 42.4672616, lng: -83.0448542 },
 ];
