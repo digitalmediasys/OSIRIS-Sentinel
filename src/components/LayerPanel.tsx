@@ -42,7 +42,9 @@ const LAYER_GROUPS = [
     icon: Navigation,
     color: '#FF6B00',
     layers: [
-      { key: 'home_depot', label: 'THD Stores & DCs', icon: Building2, color: '#FF6B00', dataKey: 'home_depot_locations' },
+      { key: 'home_depot_stores', label: 'THD Stores', icon: Building2, color: '#FF6B00', dataKey: 'home_depot_stores' },
+      { key: 'delivery_routes', label: 'Delivery Routes', icon: Truck, color: '#FF8C00', dataKey: '' },
+      { key: 'home_depot_dcs', label: "THD DC's", icon: Building2, color: '#FF6B00', dataKey: 'home_depot_dcs' },
       { key: 'home_depot_trucks', label: 'THD Carrier Trucks', icon: Building2, color: '#7C4DFF', dataKey: 'home_depot_trucks' },
       { key: 'package_carriers', label: 'Package Carriers', icon: Truck, color: '#FFB300', dataKey: 'home_depot_trucks' },
     ],

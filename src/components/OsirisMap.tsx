@@ -134,7 +134,7 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
       createDot(map, 'dot-cctv', '#39FF14', 10);
 
       // Sources
-      const sources = ['flights','military','jets','private-fl','satellites','earthquakes','gdelt','gps-jamming','day-night','cctv','fires','weather','infrastructure','maritime','maritime-choke','maritime-ships','live-news','sigint-news','conflict-zones', 'war-alerts-targets', 'war-alerts-lines', 'balloons', 'radiation', 'ip-sweep-devices', 'ip-sweep-pulse', 'ip-sweep-connections', 'traffic-cameras', 'home-depot', 'home-depot-trucks', 'package-carriers'];
+      const sources = ['flights','military','jets','private-fl','satellites','earthquakes','gdelt','gps-jamming','day-night','cctv','fires','weather','infrastructure','maritime','maritime-choke','maritime-ships','live-news','sigint-news','conflict-zones', 'war-alerts-targets', 'war-alerts-lines', 'balloons', 'radiation', 'ip-sweep-devices', 'ip-sweep-pulse', 'ip-sweep-connections', 'traffic-cameras', 'home-depot-stores', 'home-depot-dcs', 'home-depot-trucks', 'package-carriers', 'delivery-routes'];
       sources.forEach(s => map.addSource(s, { type: 'geojson', data: EMPTY_FC }));
       map.on('error', (e) => {
         console.warn('[OSIRIS] Map error:', (e && (e as any).error) || e);
@@ -263,14 +263,14 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
         'text-offset': [0, 1.6], 'text-max-width': 11, 'text-allow-overlap': false,
       }, paint: { 'text-color': '#FF8C00', 'text-halo-color': '#000', 'text-halo-width': 1, 'text-opacity': 0.65 }});
 
-      // THD Stores & Distribution Centers
-      map.addLayer({ id: 'home-depot-glow', type: 'circle', source: 'home-depot', paint: {
+      // THD Stores
+      map.addLayer({ id: 'home-depot-stores-glow', type: 'circle', source: 'home-depot-stores', paint: {
         'circle-radius': ['interpolate',['linear'],['zoom'], 1,4, 5,8, 10,12, 14,18],
         'circle-color': '#9C27B0',
         'circle-opacity': 0.12,
         'circle-blur': 1,
       }});
-      map.addLayer({ id: 'home-depot-dots', type: 'circle', source: 'home-depot', paint: {
+      map.addLayer({ id: 'home-depot-stores-dots', type: 'circle', source: 'home-depot-stores', paint: {
         'circle-radius': ['interpolate',['linear'],['zoom'], 1,2.5, 5,4, 10,6, 14,10],
         'circle-color': '#9C27B0',
         'circle-opacity': 0.9,
@@ -278,7 +278,36 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
         'circle-stroke-color': '#FFFFFF',
         'circle-stroke-opacity': 0.8,
       }});
-      map.addLayer({ id: 'home-depot-label', type: 'symbol', source: 'home-depot', minzoom: 9, layout: {
+      map.addLayer({ id: 'home-depot-stores-label', type: 'symbol', source: 'home-depot-stores', minzoom: 9, layout: {
+        'text-field': ['to-string', ['get', 'index']],
+        'text-size': 10,
+        'text-font': ['Open Sans Bold'],
+        'text-offset': [0, 0.8],
+        'text-allow-overlap': true,
+        'text-ignore-placement': true,
+      }, paint: {
+        'text-color': '#FFFFFF',
+        'text-halo-color': '#311B5C',
+        'text-halo-width': 1.5,
+        'text-opacity': 0.95,
+      }});
+
+      // THD Distribution Centers
+      map.addLayer({ id: 'home-depot-dcs-glow', type: 'circle', source: 'home-depot-dcs', paint: {
+        'circle-radius': ['interpolate',['linear'],['zoom'], 1,4, 5,8, 10,12, 14,18],
+        'circle-color': '#9C27B0',
+        'circle-opacity': 0.12,
+        'circle-blur': 1,
+      }});
+      map.addLayer({ id: 'home-depot-dcs-dots', type: 'circle', source: 'home-depot-dcs', paint: {
+        'circle-radius': ['interpolate',['linear'],['zoom'], 1,2.5, 5,4, 10,6, 14,10],
+        'circle-color': '#9C27B0',
+        'circle-opacity': 0.9,
+        'circle-stroke-width': 1,
+        'circle-stroke-color': '#FFFFFF',
+        'circle-stroke-opacity': 0.8,
+      }});
+      map.addLayer({ id: 'home-depot-dcs-label', type: 'symbol', source: 'home-depot-dcs', minzoom: 9, layout: {
         'text-field': ['to-string', ['get', 'index']],
         'text-size': 10,
         'text-font': ['Open Sans Bold'],
@@ -353,6 +382,30 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
         'icon-allow-overlap': true,
         'icon-ignore-placement': true,
       }, paint: { 'icon-opacity': 0.95 } });
+
+      map.addLayer({ id: 'delivery-routes-line', type: 'line', source: 'delivery-routes', paint: {
+        'line-color': '#FF9500',
+        'line-width': 5,
+        'line-opacity': 0.85,
+      }, layout: { 'line-join': 'round', 'line-cap': 'round' }});
+      map.addLayer({ id: 'delivery-routes-stops', type: 'circle', source: 'delivery-routes', filter: ['==', '$type', 'Point'], paint: {
+        'circle-radius': 6,
+        'circle-color': '#FF9500',
+        'circle-stroke-color': '#FFFFFF',
+        'circle-stroke-width': 2,
+      }});
+      map.addLayer({ id: 'delivery-routes-label', type: 'symbol', source: 'delivery-routes', filter: ['==', '$type', 'Point'], minzoom: 8, layout: {
+        'text-field': ['get', 'label'],
+        'text-size': 11,
+        'text-offset': [0, 1.2],
+        'text-anchor': 'top',
+        'text-font': ['Open Sans Regular'],
+        'text-allow-overlap': false,
+      }, paint: {
+        'text-color': '#FF9500',
+        'text-halo-color': '#000000',
+        'text-halo-width': 1,
+      }});
 
       // GDELT
       map.addLayer({ id: 'gdelt-dots', type: 'circle', source: 'gdelt', paint: {
@@ -647,8 +700,24 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
       map.flyTo({ center: coords, zoom: Math.max(map.getZoom(), 12), duration: 1000 });
     });
 
-    // ── THD locations popup
-    map.on('click', 'home-depot-dots', e => {
+    // ── THD store popup
+    map.on('click', 'home-depot-stores-dots', e => {
+      if (!e.features?.length) return;
+      const p = e.features[0].properties as any;
+      const coords = (e.features[0].geometry as any).coordinates;
+      popup(coords, `<div style="${pStyle}border:1px solid rgba(255,107,0,0.25);">
+        <div style="color:#FF9500;font-size:13px;font-weight:700;margin-bottom:8px;">${p.name}</div>
+        <div style="font-size:10px;color:#E8E6E0;margin-bottom:6px;">${p.type} — ${p.city}, ${p.state}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:9px;">
+          <div><span style="color:#5C5A54;">TYPE</span><br/><span style="color:#FF9500;">${p.type}</span></div>
+          <div><span style="color:#5C5A54;">LOCATION</span><br/><span style="color:#E8E6E0;">${p.city}, ${p.state}</span></div>
+        </div>
+      </div>`);
+      map.flyTo({ center: coords, zoom: Math.max(map.getZoom(), 10), duration: 900 });
+    });
+
+    // ── THD DC popup
+    map.on('click', 'home-depot-dcs-dots', e => {
       if (!e.features?.length) return;
       const p = e.features[0].properties as any;
       const coords = (e.features[0].geometry as any).coordinates;
@@ -775,7 +844,7 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
 
 
     // ── Generic hover for clickables ──
-    ['conflict-icons','cctv-dots','traffic-dots','home-depot-dots','eq-circles','sat-dots','fires-heat','gdelt-dots','weather-dots','infra-dots','maritime-dots','choke-dots','news-dots','sigint-news-dots','balloon-dots','rad-dots','ship-dots','sweep-device-dots'].forEach(layer => {
+    ['conflict-icons','cctv-dots','traffic-dots','home-depot-stores-dots','home-depot-dcs-dots','eq-circles','sat-dots','fires-heat','gdelt-dots','weather-dots','infra-dots','maritime-dots','choke-dots','news-dots','sigint-news-dots','balloon-dots','rad-dots','ship-dots','sweep-device-dots'].forEach(layer => {
       map.on('mouseenter', layer, () => { map.getCanvas().style.cursor = 'pointer'; });
       map.on('mouseleave', layer, () => { map.getCanvas().style.cursor = ''; });
     });
@@ -1027,7 +1096,7 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
 
   useEffect(() => {
     if (!mapReady) return;
-    setGeo('home-depot', activeLayers.home_depot && data.home_depot_locations ? data.home_depot_locations.map((location: any, idx: number) => ({
+    setGeo('home-depot-stores', activeLayers.home_depot_stores && data.home_depot_stores ? data.home_depot_stores.map((location: any, idx: number) => ({
       type: 'Feature',
       geometry: { type: 'Point', coordinates: [location.lng, location.lat] },
       properties: {
@@ -1039,7 +1108,23 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
         index: idx + 1,
       },
     })) : []);
-  }, [mapReady, data.home_depot_locations, activeLayers.home_depot, setGeo]);
+  }, [mapReady, data.home_depot_stores, activeLayers.home_depot_stores, setGeo]);
+
+  useEffect(() => {
+    if (!mapReady) return;
+    setGeo('home-depot-dcs', activeLayers.home_depot_dcs && data.home_depot_dcs ? data.home_depot_dcs.map((location: any, idx: number) => ({
+      type: 'Feature',
+      geometry: { type: 'Point', coordinates: [location.lng, location.lat] },
+      properties: {
+        name: location.name,
+        type: location.type,
+        city: location.city,
+        state: location.state,
+        country: location.country,
+        index: idx + 1,
+      },
+    })) : []);
+  }, [mapReady, data.home_depot_dcs, activeLayers.home_depot_dcs, setGeo]);
 
   useEffect(() => {
     if (!mapReady) return;
@@ -1084,6 +1169,73 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
     })) : []);
     setGeo('package-carriers', features as any[]);
   }, [mapReady, data.home_depot_trucks, activeLayers.package_carriers, setGeo]);
+
+  useEffect(() => {
+    if (!mapReady) return;
+
+    const routeCoords: [number, number][] = [
+      [-83.1695021, 42.4285517], // THD Store 1639 (Detroit)
+      [-83.1260, 42.3955],       // Stop 1
+      [-83.0730, 42.3561],       // Stop 2
+      [-83.0484, 42.3355],       // Greektown, Detroit
+    ];
+
+    const pointFeatures = [
+      {
+        type: 'Feature' as const,
+        geometry: { type: 'Point' as const, coordinates: routeCoords[0] },
+        properties: { label: 'THD Store 1639' },
+      },
+      {
+        type: 'Feature' as const,
+        geometry: { type: 'Point' as const, coordinates: routeCoords[1] },
+        properties: { label: 'Stop 1' },
+      },
+      {
+        type: 'Feature' as const,
+        geometry: { type: 'Point' as const, coordinates: routeCoords[2] },
+        properties: { label: 'Stop 2' },
+      },
+      {
+        type: 'Feature' as const,
+        geometry: { type: 'Point' as const, coordinates: routeCoords[3] },
+        properties: { label: 'Greektown' },
+      },
+    ];
+
+    const routeSourceFeatures = async () => {
+      const coordinatesParam = routeCoords.map(([lng, lat]) => `${lng},${lat}`).join(';');
+      const url = `https://router.project-osrm.org/route/v1/driving/${coordinatesParam}?overview=full&geometries=geojson&steps=false&annotations=false`;
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`OSRM request failed: ${response.status}`);
+        const json = await response.json();
+        const osrmCoords = json.routes?.[0]?.geometry?.coordinates;
+        const lineFeature = {
+          type: 'Feature' as const,
+          geometry: { type: 'LineString' as const, coordinates: Array.isArray(osrmCoords) && osrmCoords.length ? osrmCoords : routeCoords },
+          properties: { label: 'THD 1639 → Greektown' },
+        };
+        setGeo('delivery-routes', [lineFeature, ...pointFeatures]);
+      } catch (error) {
+        console.warn('[OSIRIS] Delivery route OSRM fetch failed, falling back to straight line', error);
+        setGeo('delivery-routes', [
+          {
+            type: 'Feature' as const,
+            geometry: { type: 'LineString' as const, coordinates: routeCoords },
+            properties: { label: 'THD 1639 → Greektown' },
+          },
+          ...pointFeatures,
+        ]);
+      }
+    };
+
+    if (activeLayers.delivery_routes) {
+      routeSourceFeatures();
+    } else {
+      setGeo('delivery-routes', []);
+    }
+  }, [mapReady, activeLayers.delivery_routes, setGeo]);
 
   useEffect(() => {
     if (!mapReady) return;
@@ -1191,8 +1343,10 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
     setVis(['fl-military'], activeLayers.military);
     setVis(['cctv-glow','cctv-dots','cctv-label'], activeLayers.cctv);
     setVis(['traffic-glow','traffic-dots','traffic-label'], activeLayers.traffic_cameras);
-    setVis(['home-depot-glow','home-depot-dots','home-depot-label'], activeLayers.home_depot);
+    setVis(['home-depot-stores-glow','home-depot-stores-dots','home-depot-stores-label'], activeLayers.home_depot_stores);
+    setVis(['home-depot-dcs-glow','home-depot-dcs-dots','home-depot-dcs-label'], activeLayers.home_depot_dcs);
     setVis(['home-depot-trucks-glow','home-depot-trucks-dots','home-depot-trucks-label'], activeLayers.home_depot_trucks);
+    setVis(['delivery-routes-line','delivery-routes-stops','delivery-routes-label'], activeLayers.delivery_routes);
     setVis(['fires-heat'], activeLayers.fires);
     setVis(['weather-glow','weather-dots','weather-label'], activeLayers.weather);
     setVis(['infra-glow','infra-dots','infra-label'], activeLayers.infrastructure);

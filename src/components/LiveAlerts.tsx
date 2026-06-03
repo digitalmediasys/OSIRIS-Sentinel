@@ -24,6 +24,7 @@ const RISK_COLORS: Record<string, string> = {
 export default function LiveAlerts({ data, onLocate, onWatchFeed }: LiveAlertsProps) {
   const [expanded, setExpanded] = useState(true);
   const [filter, setFilter] = useState<'all' | 'news' | 'quakes' | 'feeds' | 'supply'>('all');
+  const [selectedAlert, setSelectedAlert] = useState<any | null>(null);
 
   // Built-in live feeds — verified video IDs (synced with /api/live-news)
   const BUILTIN_FEEDS = [
@@ -92,7 +93,51 @@ export default function LiveAlerts({ data, onLocate, onWatchFeed }: LiveAlertsPr
     { title: 'Strait of Hormuz supply chain disruption', source: 'Maritime chokepoint', lat: 26.57, lng: 56.25, severity: 'HIGH' },
     { title: 'Strait of Malacca supply chain disruption', source: 'Maritime chokepoint', lat: 2.50, lng: 101.50, severity: 'ELEVATED' },
   ];
-  SUPPLY_CHAIN_ALERTS.forEach(alert => alerts.push({ type: 'supply', ...alert }));
+
+  const HOMEDPOT_SUPPLY_NEWS = [
+    {
+      title: 'Home Depot pilots Order Intelligence AI for delivery promise accuracy',
+      summary: 'Home Depot rolls out AI order intelligence to improve delivery promise accuracy, reduce late shipments, and optimize supply chain response.',
+      source: 'Home Depot Supply Intelligence',
+      url: 'https://corporate.homedepot.com/newsroom',
+      lat: 33.748995,
+      lng: -84.387982,
+      severity: 'HIGH',
+      time: '2026-05-28T08:00:00Z',
+    },
+    {
+      title: 'Home Depot expands AI order intelligence across flatbed distribution centers',
+      summary: 'Flatbed Distribution Centers are now leveraging AI-driven order orchestration and predictive inventory routing to speed freight handling.',
+      source: 'Home Depot Logistics',
+      url: 'https://corporate.homedepot.com/supply-chain',
+      lat: 39.2179507,
+      lng: -76.4828005,
+      severity: 'ELEVATED',
+      time: '2026-05-27T14:30:00Z',
+    },
+    {
+      title: 'Home Depot adds intelligent delivery and real-time tracking to supply chain operations',
+      summary: 'Home Depot introduces enhanced delivery visibility with real-time tracking and AI monitoring for key supply chain corridors.',
+      source: 'Home Depot Delivery',
+      url: 'https://corporate.homedepot.com/newsroom',
+      lat: 32.747201,
+      lng: -96.8641289,
+      severity: 'MODERATE',
+      time: '2026-05-26T11:15:00Z',
+    },
+    {
+      title: 'Home Depot supply chain news: faster store replenishment with AI-driven order orchestration',
+      summary: 'Order Intelligence AI is being used to accelerate store replenishment cycles and better forecast demand for high-volume home improvement products.',
+      source: 'Home Depot Order Intelligence',
+      url: 'https://corporate.homedepot.com/newsroom',
+      lat: 40.712776,
+      lng: -74.005974,
+      severity: 'LOW',
+      time: '2026-05-25T10:00:00Z',
+    },
+  ];
+
+  SUPPLY_CHAIN_ALERTS.concat(HOMEDPOT_SUPPLY_NEWS).forEach(alert => alerts.push({ type: 'supply', ...alert }));
 
   // Built-in live feeds (always present)
   BUILTIN_FEEDS.forEach(f => {
@@ -174,6 +219,10 @@ export default function LiveAlerts({ data, onLocate, onWatchFeed }: LiveAlertsPr
                   <button
                     key={i}
                     onClick={() => {
+                      if (alert.type === 'supply') {
+                        setSelectedAlert(alert);
+                        return;
+                      }
                       onLocate(alert.lat, alert.lng);
                       if (alert.feedUrl && onWatchFeed) {
                         onWatchFeed(alert.feedUrl, alert.title);
@@ -215,6 +264,77 @@ export default function LiveAlerts({ data, onLocate, onWatchFeed }: LiveAlertsPr
                 </div>
               )}
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {selectedAlert && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[500] flex items-center justify-center bg-black/70 p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.96, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.96, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="w-full max-w-lg rounded-2xl border border-[var(--border-primary)] bg-[#080808]/95 p-5 shadow-2xl"
+            >
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <div>
+                  <div className="text-[11px] font-mono uppercase tracking-[0.35em] text-[var(--text-muted)]">Supply Chain News</div>
+                  <h3 className="mt-2 text-lg font-bold text-[var(--text-primary)]">{selectedAlert.title}</h3>
+                  <p className="mt-1 text-[10px] font-mono text-[var(--text-muted)]">Source: {selectedAlert.source}</p>
+                </div>
+                <button
+                  onClick={() => setSelectedAlert(null)}
+                  className="text-[var(--text-muted)] hover:text-white transition-colors"
+                  aria-label="Close supply news modal"
+                >
+                  <ChevronUp className="w-5 h-5 rotate-45" />
+                </button>
+              </div>
+
+              <div className="space-y-3 text-[12px] leading-6 text-[var(--text-secondary)]">
+                <p>{selectedAlert.summary || 'No summary available for this story.'}</p>
+                <p className="flex flex-wrap items-center gap-1 text-[var(--text-secondary)]">
+                  <span className="font-bold text-[var(--text-primary)]">Original source:</span>
+                  {selectedAlert.url ? (
+                    <a href={selectedAlert.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[var(--gold-primary)] underline hover:text-white">
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span className="truncate max-w-[18rem]">{selectedAlert.url}</span>
+                    </a>
+                  ) : (
+                    <span>{selectedAlert.source}</span>
+                  )}
+                </p>
+              </div>
+
+              <div className="mt-6 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (selectedAlert.url) window.open(selectedAlert.url, '_blank');
+                  }}
+                  className="rounded-full border border-[var(--border-primary)] px-4 py-2 text-[10px] uppercase tracking-widest text-[var(--text-primary)] hover:bg-white/5 transition"
+                >
+                  Open Source
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedAlert(null);
+                    onLocate(selectedAlert.lat, selectedAlert.lng);
+                  }}
+                  className="rounded-full bg-[var(--gold-primary)] px-4 py-2 text-[10px] uppercase tracking-widest text-black hover:bg-[#f3c144] transition"
+                >
+                  Fly to location
+                </button>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

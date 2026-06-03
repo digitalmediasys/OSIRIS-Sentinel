@@ -1,0 +1,582 @@
+[
+  {
+    "address": "155 Alcovy Industrial, Dacula, GA 30019",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "8423 Sunstate Street, Tampa, FL 33634",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "2900 N Andrews Ave Ext, Pompano Beach, FL 33064",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "1701 N Claton Drive, Columbia, TN 38401",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "501 Black Satchel Road, Charlotte, NC 28216",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "9215 Riverview Drive, St Louis, MO 63137",
+    "lat": 38.7307479,
+    "lng": -90.2196732
+  },
+  {
+    "address": "570 North Depot Drive, Ogden, UT 84404",
+    "lat": 41.2714683,
+    "lng": -111.9979535
+  },
+  {
+    "address": "1101 S Industrial Pkwy, Clearfield, UT 84015",
+    "lat": 41.1027929,
+    "lng": -112.0228939
+  },
+  {
+    "address": "300 S 55th Avenue, Phoenix, AZ 85043",
+    "lat": 33.444828,
+    "lng": -112.1779528
+  },
+  {
+    "address": "10815 Sentinel Drive, San Antonio, TX 78217",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "18100 Chisholm Trail, Houston, TX 77060",
+    "lat": 29.9590767,
+    "lng": -95.3992491
+  },
+  {
+    "address": "835 A - Pride Blvd, Hammond, LA 70401",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "1727 Warren Street, Kansas City, MO 64116",
+    "lat": 39.1403884,
+    "lng": -94.5507313
+  },
+  {
+    "address": "9410 Heinze Way, Henderson, CO 89044",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "8535 Oakwood Place, Rancho Cucamonga, CA 91730",
+    "lat": 34.0984617,
+    "lng": -117.5601197
+  },
+  {
+    "address": "40745 Encyclopedia Circle, Fremont, CA 94538",
+    "lat": 37.515543,
+    "lng": -121.9857513
+  },
+  {
+    "address": "14659 Alondra Blvd, La Mirada, CA 90638",
+    "lat": 33.8879161,
+    "lng": -118.0189052
+  },
+  {
+    "address": "38481 Huron River Drive, Romulus, MI 48174",
+    "lat": 42.2154982,
+    "lng": -83.417604
+  },
+  {
+    "address": "30301 Carter Street, Solon, OH 44139",
+    "lat": 41.3812486,
+    "lng": -81.4657052
+  },
+  {
+    "address": "1000 Knell Road, Montgomery, IL 60538",
+    "lat": 41.7337638,
+    "lng": -88.3512312
+  },
+  {
+    "address": "8800 S 190th Street, Kent, WA 98031",
+    "lat": 47.4330926,
+    "lng": -122.2229726
+  },
+  {
+    "address": "9222 W Jefferson Blvd, Dallas, TX 75211",
+    "lat": 32.747201,
+    "lng": -96.8641289
+  },
+  {
+    "address": "101 Prosperity Ave SE, South Valley, NM 87105",
+    "lat": 35.015143,
+    "lng": -106.660017
+  },
+  {
+    "address": "100 Riverside Drive, Keasbey, NJ 08832",
+    "lat": 40.5163765,
+    "lng": -74.3287644
+  },
+  {
+    "address": "722 Kasota Circle SE, Minneapolis, MN 55414",
+    "lat": 44.9813052,
+    "lng": -93.2139887
+  },
+  {
+    "address": "100 Blue Heron Way, Edison, NJ 08837",
+    "lat": 40.5092203,
+    "lng": -74.3379923
+  },
+  {
+    "address": "205 Sills Road, Yaphank, NY 11980",
+    "lat": 40.8091269,
+    "lng": -72.9543574
+  },
+  {
+    "address": "7700 Rolling Mill Road, Baltimore, MD 21224",
+    "lat": 39.3014036,
+    "lng": -76.5099662
+  },
+  {
+    "address": "7100 Holladay Tyler Road, Glenn Dale, MD 20769",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "625 University Ave, Norwood, MA 02062",
+    "lat": 42.2005706,
+    "lng": -71.1750929
+  },
+  {
+    "address": "340 Port Road 22, Stockton, CA 95203",
+    "lat": 37.9429524,
+    "lng": -121.3255912
+  },
+  {
+    "address": "170 Highland Park Drive, Bloomfield, CT 06002",
+    "lat": 41.8639734,
+    "lng": -72.738482
+  },
+  {
+    "address": "2700 Burlington Avenue, Delanco, NJ 08075",
+    "lat": 40.0590982,
+    "lng": -74.9345853
+  },
+  {
+    "address": "2359 Center Square Road, Swedesboro, NJ 08085",
+    "lat": 39.7366844,
+    "lng": -75.3192225
+  },
+  {
+    "address": "130 Docks Corner Road South, Brunswick, NJ 08810",
+    "lat": 40.3720686,
+    "lng": -74.4849299
+  },
+  {
+    "address": "4705 East Liberty St, Mexico, MO 65265",
+    "lat": 39.1633412,
+    "lng": -91.8314925
+  },
+  {
+    "address": "4565 Redlands Ave, Perris, CA 92571",
+    "lat": 33.8567995,
+    "lng": -117.2167907
+  },
+  {
+    "address": "350 West Markham St, Perris, CA 92571",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "2400 Highway 155 South, Bldg 200, Locust Grove, GA 30248",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "22671 Pemberville Rd, Luckey, OH 43443",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "16502 Hunters Green Pkwy, Hagerstown, MD 21740",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "2500 Highway 155 South, Locust Grove, GA 30248",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "6311 Trade Point Ave, Sparrows Point, MD 21219",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "500 Gateway Boulevard - Suite Ifc, Monroe, OH 45050",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "2300 Beckleymeade Avenue - Suite Ifc, Dallas, TX 75232",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "300 Enterprise Way Parcel #10, Pittston Township, PA 18640",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "27352 River Bluff Avenue, Redlands, CA 92374",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "3900 Brandon Rd Suite B, Joliet, IL 60436",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "3150 Hwy 42, Locust Grove, GA 30248",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "400 Rodeo Place, Anchorage, AK 99508",
+    "lat": 61.2167265,
+    "lng": -149.8143098
+  },
+  {
+    "address": "901 Northview Rd, Waukesha, WI 53188",
+    "lat": 43.0316407,
+    "lng": -88.2387523
+  },
+  {
+    "address": "7301 Security Way, Jersey Village, TX 77040",
+    "lat": 29.87483,
+    "lng": -95.556991
+  },
+  {
+    "address": "3800 S Macarthur Blvd, Oklahoma City, OK 73179",
+    "lat": 35.4276755,
+    "lng": -97.6185995
+  },
+  {
+    "address": "10 North Avenue East, Elizabeth, NJ 07201",
+    "lat": 40.6696505,
+    "lng": -74.1778949
+  },
+  {
+    "address": "7501 Andrews Federal, Suitland, MD 20746",
+    "lat": 38.8307027,
+    "lng": -76.8855471
+  },
+  {
+    "address": "300 South Front Street, Seattle, WA 98108",
+    "lat": 47.5476675,
+    "lng": -122.3302876
+  },
+  {
+    "address": "6301 Tradepoint Ave, Sparrows Point, MD 21219",
+    "lat": 39.2179507,
+    "lng": -76.4828005
+  },
+  {
+    "address": "7703 N Sam Houston Pkwy, Houston, TX 77064",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "4863 Scarlet Lane, Stow, OH 44224",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "2840 Innovation Way, Sun Prairie, WI 53590",
+    "lat": 43.1521735,
+    "lng": -89.2659447
+  },
+  {
+    "address": "18700 S. Ridgeland Ave, Tinley Park, IL 60477",
+    "lat": 41.5555734,
+    "lng": -87.7712373
+  },
+  {
+    "address": "8655 Corporate Drive Frisco TX, 75033",
+    "lat": 33.21165,
+    "lng": -96.8076528
+  },
+  {
+    "address": "1105 Meister Lane, Pflugerville, TX 78660",
+    "lat": 30.485218,
+    "lng": -97.6270756
+  },
+  {
+    "address": "221 Riverview Dr, Perth Amboy, NJ 08861",
+    "lat": 40.5081464,
+    "lng": -74.2856314
+  },
+  {
+    "address": "1911 South Wiggins Rd, Plant City, FL 33566",
+    "lat": 28.010776,
+    "lng": -82.0679832
+  },
+  {
+    "address": "1515 Bobali Drive, Harrisburg, PA 17104",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "9377 Laredo Ave Bldg 8, Fort Myers, FL 33905",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "6043 Southern Blv Bldg 3, West Palm Beach, FL 33413",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "2211 Corner Ridge, San Antonio, TX 78219",
+    "lat": 29.448656,
+    "lng": -98.3913291
+  },
+  {
+    "address": "5855 Vista East Parkway, Orlando, FL 32829",
+    "lat": 28.4774194,
+    "lng": -81.229787
+  },
+  {
+    "address": "2640 Zeppelin Rd Ste 150, Colorado Springs, CO 80916",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "6900 Harbour View Blvd, Suffolk, VA 23435",
+    "lat": 36.8851682,
+    "lng": -76.4350928
+  },
+  {
+    "address": "12300 62nd St N, Largo, FL 33773",
+    "lat": 27.900999,
+    "lng": -82.7209537
+  },
+  {
+    "address": "960 Rotterdam Industrial, Schenectady, NY 12306",
+    "lat": 42.7828509,
+    "lng": -73.9863424
+  },
+  {
+    "address": "234 Mason Rd, La Vergne, TN 37086",
+    "lat": 36.0062722,
+    "lng": -86.5832672
+  },
+  {
+    "address": "74 Brookfield Oaks Drive, Greenville, SC 29607",
+    "lat": 34.8036556,
+    "lng": -82.2796483
+  },
+  {
+    "address": "4735 Arcadia Drive, Frederick, MD 21704",
+    "lat": 39.3647042,
+    "lng": -77.4205997
+  },
+  {
+    "address": "2300 Beckleymeade Ave., Dallas, TX 75232",
+    "lat": 32.640215,
+    "lng": -96.85686
+  },
+  {
+    "address": "5200 SW Wenger Drive, Topeka, KS 66609",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "480 Park Center Drive, Winchester, VA 22603",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "8500 Willard Drive, Breinigsville, PA 18031",
+    "lat": 40.5516629,
+    "lng": -75.6275363
+  },
+  {
+    "address": "500 Gateway Blvd, Monroe, OH 45050",
+    "lat": 39.440005,
+    "lng": -84.325341
+  },
+  {
+    "address": "6201 Peterson Road, Lake Park, GA 31636",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "6400 Jefferson Metro Pkwy, McCalla, AL 35111",
+    "lat": 33.3155443,
+    "lng": -87.0366716
+  },
+  {
+    "address": "27352 River Bluff Avenue, Redlands, CA 92374",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "420 Foster Brothers Drive, West Columbia, SC 29172",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "300 Enterprise Way, Pittson Township, PA 18640",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "1989 Township Road 142, Van Buren, OH 45889",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "50 Campanelli Drive, Westfield, MA 01085",
+    "lat": 42.1721016,
+    "lng": -72.7352653
+  },
+  {
+    "address": "3150 Hwy 42 South, Locust Grove, GA 30248",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "11333 N. Gessner Road, Houston, TX 77064",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "4999 Depot Court SE, Salem, OR 97317",
+    "lat": 44.9041053,
+    "lng": -122.9596934
+  },
+  {
+    "address": "1400 Pescadero Avenue, Tracy, CA 95304",
+    "lat": 37.7614935,
+    "lng": -121.4180348
+  },
+  {
+    "address": "5655 E Ontario Mills Pky., Ontario, CA 91764",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "9081 W Washington Street, Tolleson, AZ 85353",
+    "lat": 33.4473827,
+    "lng": -112.256956
+  },
+  {
+    "address": "7808 Hawks Prairie Rd NE, Lacey, WA 98516",
+    "lat": 47.0856368,
+    "lng": -122.7757208
+  },
+  {
+    "address": "2950 Centerpoint Way, Elwood, IL 60436",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "1070 Windham Pkwy, Romeoville, IL 60446",
+    "lat": 41.6633458,
+    "lng": -88.110161
+  },
+  {
+    "address": "130 Interstate Blvd, Monroe Township, NJ 08831",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "7037 West Van Buren, Phoenix, AZ 85043",
+    "lat": 33.4499529,
+    "lng": -112.209961
+  },
+  {
+    "address": "2200 S Business 45, Corsicana, TX 75110",
+    "lat": 32.0758555,
+    "lng": -96.4530129
+  },
+  {
+    "address": "190 Greenwood Industrial, Mcdonough, GA 30253",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "125 Crossroads Pkwy, Savannah, GA 31407",
+    "lat": 32.1589246,
+    "lng": -81.2107042
+  },
+  {
+    "address": "861 Nestle Way, Breinigsville, PA 18031",
+    "lat": 40.5739841,
+    "lng": -75.64795
+  },
+  {
+    "address": "309 Little Hearst Pkwy, Savannah, GA 31407",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "280 Maranto Manor Drive, Winchester, VA 22602",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "18300 Harlan Road, Lathrop, CA 95330",
+    "lat": 37.7954027,
+    "lng": -121.3001122
+  },
+  {
+    "address": "7301 Security Way, Jersey Village, TX 77040",
+    "lat": 29.87483,
+    "lng": -95.556991
+  },
+  {
+    "address": "11650 Venture Drive, Mira Loma, CA 91752",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "address": "6115 FM 1405, Baytown, TX 77523",
+    "lat": 29.722063,
+    "lng": -94.9162721
+  },
+  {
+    "address": "9303 Orion Drive NE, Lacey, WA 98516",
+    "lat": 47.0699214,
+    "lng": -122.7454112
+  },
+  {
+    "address": "2320 Beckleymeade Ave, Dallas, TX 75232",
+    "lat": 32.6374933,
+    "lng": -96.8500223
+  },
+  {
+    "address": "901 Carlow Drive, Bolingbrook, IL 60490",
+    "lat": 41.667759,
+    "lng": -88.131215
+  },
+  {
+    "address": "601 Neelytown Road, Montgomery, NY 12549",
+    "lat": 41.4962235,
+    "lng": -74.2428018
+  },
+  {
+    "address": "66 Cranbury Station Road, Cranbury, NJ 08512",
+    "lat": 40.2857459,
+    "lng": -74.5071049
+  },
+  {
+    "address": "61 Cranbury Station Road, Cranbury, NJ 08512",
+    "lat": 40.2993704,
+    "lng": -74.4944272
+  }
+]

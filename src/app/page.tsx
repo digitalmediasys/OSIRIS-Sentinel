@@ -15,6 +15,8 @@ import KeyboardShortcuts from '@/components/KeyboardShortcuts';
 import GlobalStatusBar from '@/components/GlobalStatusBar';
 import LiveAlerts from '@/components/LiveAlerts';
 import { THD_LOCATIONS } from '@/lib/home-depot-locations';
+import DC_GEO from '@/lib/home-depot-dcs-geocoded.json';
+import STORES_JSON from '@/lib/home-depot-stores.json';
 
 const OsirisMap = dynamic(() => import('@/components/OsirisMap'), { ssr: false });
 const LayerPanel = dynamic(() => import('@/components/LayerPanel'));
@@ -107,7 +109,7 @@ export default function Dashboard() {
   const geocodeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastGeocodedPos = useRef<{ lat: number; lng: number } | null>(null);
 
-  // ── DEFAULT: Most layers OFF — fast initial load ──
+  // ── DEFAULT: Most layers OFF — only THD Stores selected by default for quick THD visibility ──
   const [activeLayers, setActiveLayers] = useState({
     flights: false,
     private: false,
@@ -118,8 +120,11 @@ export default function Dashboard() {
     balloons: false,
     cctv: true,
     traffic_cameras: false,
-    home_depot: false,
+    home_depot_stores: true,
+    home_depot_dcs: false,
+    delivery_routes: false,
     home_depot_trucks: false,
+    package_carriers: false,
     live_news: true,
     news_intel: true,
     earthquakes: true,
@@ -144,9 +149,54 @@ export default function Dashboard() {
 
   // Load THD static locations
   useEffect(() => {
+    // Prefer a richer pre-generated stores JSON (more complete) when available
+    const storesFromJson = Array.isArray((STORES_JSON as any).stores) ? (STORES_JSON as any).stores.map((s: any, i: number) => ({
+      name: s.name || 'Home Depot',
+      type: s.type || 'Store',
+      city: s.city || s.tags?.['addr:city'] || '',
+      state: s.state || s.tags?.['addr:state'] || '',
+      country: s.country || 'USA',
+      lat: Number(s.lat),
+      lng: Number(s.lng),
+      id: s.id || `local-${i}`,
+      source: s.source || 'local-json',
+      tags: s.tags || {},
+    })) : [];
+    const stores = storesFromJson.length ? storesFromJson : THD_LOCATIONS.filter(loc => loc.type === 'Store');
+
+    const defaultDcs = THD_LOCATIONS.filter(loc => loc.type === 'Distribution Center');
+    const dcsFromGeo = Array.isArray(DC_GEO) ? DC_GEO.filter(r => r.lat && r.lng).map((r: any) => {
+      const name = r.address;
+      const parts = r.address.split(',').map(p => p.trim());
+      const city = parts.length >= 2 ? parts[parts.length - 2] : '';
+      const state = parts.length >= 2 ? (parts[parts.length - 1] || '').split(' ')[0] : '';
+      return {
+        type: 'Distribution Center',
+        name,
+        address: r.address,
+        lat: r.lat,
+        lng: r.lng,
+        city,
+        state,
+        country: 'USA',
+        source: 'spscommerce',
+        code: r.index,
+      };
+    }) : [];
+    const dcs = [
+      ...defaultDcs,
+      ...dcsFromGeo.filter((geo) => !defaultDcs.some((dc) =>
+        (dc.lat === geo.lat && dc.lng === geo.lng) ||
+        (dc.name === geo.name) ||
+        (dc.city === geo.city && dc.state === geo.state && geo.address.includes(dc.city))
+      )),
+    ];
+
     dataRef.current = {
       ...dataRef.current,
       home_depot_locations: THD_LOCATIONS,
+      home_depot_stores: stores,
+      home_depot_dcs: dcs,
     };
     setDataVersion(v => v + 1);
   }, []);
@@ -172,6 +222,18 @@ export default function Dashboard() {
       });
     }
   }, []);
+
+  useEffect(() => {
+    setActiveLayers(prev => {
+      if (prev.home_depot_stores && !prev.delivery_routes) {
+        return { ...prev, delivery_routes: true };
+      }
+      if (!prev.home_depot_stores && prev.delivery_routes) {
+        return { ...prev, delivery_routes: false };
+      }
+      return prev;
+    });
+  }, [activeLayers.home_depot_stores]);
 
   // URL state: update URL on view change (debounced)
   const urlTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -356,7 +418,7 @@ export default function Dashboard() {
       layerFetchedRef.current.add('infrastructure');
     }
     // THD locations (public OpenStreetMap data)
-    if (activeLayers.home_depot && !layerFetchedRef.current.has('home_depot')) {
+    if ((activeLayers.home_depot_stores || activeLayers.home_depot_dcs) && !layerFetchedRef.current.has('home_depot')) {
       fetchEndpoint('/api/home-depot', d => ({ home_depot_locations: d.locations }));
       layerFetchedRef.current.add('home_depot');
     }
