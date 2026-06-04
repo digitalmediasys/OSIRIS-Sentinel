@@ -87,6 +87,36 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
     map.addImage(id, { width: size, height: size, data: new Uint8Array(ctx.getImageData(0, 0, size, size).data) });
   }, []);
 
+  const createWarehouseIcon = useCallback((map: maplibregl.Map, id: string, color: string, size: number) => {
+    if (map.hasImage(id)) return;
+    const canvas = document.createElement('canvas');
+    canvas.width = size; canvas.height = size;
+    const ctx = canvas.getContext('2d')!;
+    const center = size / 2;
+    const radius = size * 0.42;
+
+    ctx.clearRect(0, 0, size, size);
+
+    // Outer filled circle
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(center, center, radius, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Outer stroke ring
+    ctx.strokeStyle = 'rgba(255,255,255,0.9)';
+    ctx.lineWidth = Math.max(2, size * 0.06);
+    ctx.stroke();
+
+    // Inner highlight
+    ctx.fillStyle = 'rgba(255,255,255,0.18)';
+    ctx.beginPath();
+    ctx.arc(center - size * 0.1, center - size * 0.1, radius * 0.35, 0, Math.PI * 2);
+    ctx.fill();
+
+    map.addImage(id, { width: size, height: size, data: new Uint8Array(ctx.getImageData(0, 0, size, size).data) });
+  }, []);
+
   const createDot = useCallback((map: maplibregl.Map, id: string, color: string, size: number) => {
     if (map.hasImage(id)) return;
     const canvas = document.createElement('canvas');
@@ -132,10 +162,17 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
       createDot(map, 'dot-green', '#00E676', 10);
       createDot(map, 'dot-fire', '#FF6B00', 10);
       createDot(map, 'dot-cctv', '#39FF14', 10);
+      createWarehouseIcon(map, 'warehouse-orange', '#FF6B00', 30);
 
       // Sources
       const sources = ['flights','military','jets','private-fl','satellites','earthquakes','gdelt','gps-jamming','day-night','cctv','fires','weather','infrastructure','maritime','maritime-choke','maritime-ships','live-news','sigint-news','conflict-zones', 'war-alerts-targets', 'war-alerts-lines', 'balloons', 'radiation', 'ip-sweep-devices', 'ip-sweep-pulse', 'ip-sweep-connections', 'traffic-cameras', 'home-depot-stores', 'home-depot-dcs', 'home-depot-trucks', 'package-carriers', 'delivery-routes'];
       sources.forEach(s => map.addSource(s, { type: 'geojson', data: EMPTY_FC }));
+      map.addSource('clouds', {
+        type: 'raster',
+        tiles: ['https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_SNPP_CorrectedReflectance_TrueColor/default/latest/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg'],
+        tileSize: 256,
+        maxzoom: 9,
+      });
       map.on('error', (e) => {
         console.warn('[OSIRIS] Map error:', (e && (e as any).error) || e);
       });
@@ -212,6 +249,7 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
 
       // Day/Night
       map.addLayer({ id: 'day-night-fill', type: 'fill', source: 'day-night', paint: { 'fill-color': '#000022', 'fill-opacity': 0.35 }});
+      map.addLayer({ id: 'clouds-layer', type: 'raster', source: 'clouds', paint: { 'raster-opacity': 0.55 } }, 'day-night-fill');
 
       // Earthquakes
       map.addLayer({ id: 'eq-circles', type: 'circle', source: 'earthquakes', paint: {
@@ -295,17 +333,17 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
       // THD Distribution Centers
       map.addLayer({ id: 'home-depot-dcs-glow', type: 'circle', source: 'home-depot-dcs', paint: {
         'circle-radius': ['interpolate',['linear'],['zoom'], 1,4, 5,8, 10,12, 14,18],
-        'circle-color': '#9C27B0',
+        'circle-color': '#FF6B00',
         'circle-opacity': 0.12,
         'circle-blur': 1,
       }});
-      map.addLayer({ id: 'home-depot-dcs-dots', type: 'circle', source: 'home-depot-dcs', paint: {
-        'circle-radius': ['interpolate',['linear'],['zoom'], 1,2.5, 5,4, 10,6, 14,10],
-        'circle-color': '#9C27B0',
-        'circle-opacity': 0.9,
-        'circle-stroke-width': 1,
-        'circle-stroke-color': '#FFFFFF',
-        'circle-stroke-opacity': 0.8,
+      map.addLayer({ id: 'home-depot-dcs-icons', type: 'symbol', source: 'home-depot-dcs', layout: {
+        'icon-image': 'warehouse-orange',
+        'icon-size': ['interpolate',['linear'],['zoom'], 1,0.7, 5,0.85, 10,1.1, 14,1.4],
+        'icon-allow-overlap': true,
+        'icon-ignore-placement': true,
+      }, paint: {
+        'icon-opacity': 1,
       }});
       map.addLayer({ id: 'home-depot-dcs-label', type: 'symbol', source: 'home-depot-dcs', minzoom: 9, layout: {
         'text-field': ['to-string', ['get', 'index']],
@@ -717,7 +755,7 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
     });
 
     // ── THD DC popup
-    map.on('click', 'home-depot-dcs-dots', e => {
+    map.on('click', 'home-depot-dcs-icons', e => {
       if (!e.features?.length) return;
       const p = e.features[0].properties as any;
       const coords = (e.features[0].geometry as any).coordinates;
@@ -1376,11 +1414,12 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
     setVis(['cctv-glow','cctv-dots','cctv-label'], activeLayers.cctv);
     setVis(['traffic-glow','traffic-dots','traffic-label'], activeLayers.traffic_cameras);
     setVis(['home-depot-stores-glow','home-depot-stores-dots','home-depot-stores-label'], activeLayers.home_depot_stores);
-    setVis(['home-depot-dcs-glow','home-depot-dcs-dots','home-depot-dcs-label'], activeLayers.home_depot_dcs);
+    setVis(['home-depot-dcs-glow','home-depot-dcs-icons','home-depot-dcs-label'], activeLayers.home_depot_dcs);
     setVis(['home-depot-trucks-glow','home-depot-trucks-dots','home-depot-trucks-label'], activeLayers.home_depot_trucks);
     setVis(['delivery-routes-line','delivery-routes-stops','delivery-routes-label'], activeLayers.delivery_routes);
     setVis(['fires-heat'], activeLayers.fires);
     setVis(['weather-glow','weather-dots','weather-label'], activeLayers.weather);
+    setVis(['clouds-layer'], activeLayers.clouds);
     setVis(['infra-glow','infra-dots','infra-label'], activeLayers.infrastructure);
     setVis(['maritime-glow','maritime-dots','maritime-label'], activeLayers.maritime);
     setVis(['choke-glow','choke-dots','choke-label'], activeLayers.maritime);

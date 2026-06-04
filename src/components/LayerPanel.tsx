@@ -21,71 +21,79 @@ const LAYER_GROUPS = [
     label: 'AVIATION',
     icon: Plane,
     color: '#00E5FF',
+    colorClass: 'text-[#00E5FF]',
     layers: [
-      { key: 'flights', label: 'Commercial', icon: Plane, color: '#00E5FF', dataKey: 'commercial_flights' },
-      { key: 'private', label: 'Private', icon: Plane, color: '#00E676', dataKey: 'private_flights' },
-      { key: 'jets', label: 'Private Jets', icon: Plane, color: '#FF69B4', dataKey: 'private_jets' },
-      { key: 'military', label: 'Military', icon: Shield, color: '#FF3D3D', dataKey: 'military_flights' },
+      { key: 'flights', label: 'Commercial', icon: Plane, color: '#00E5FF', colorClass: 'text-[#00E5FF]', dotClass: 'bg-[#00E5FF]', dataKey: 'commercial_flights' },
+      { key: 'private', label: 'Private', icon: Plane, color: '#00E676', colorClass: 'text-[#00E676]', dotClass: 'bg-[#00E676]', dataKey: 'private_flights' },
+      { key: 'jets', label: 'Private Jets', icon: Plane, color: '#FF69B4', colorClass: 'text-[#FF69B4]', dotClass: 'bg-[#FF69B4]', dataKey: 'private_jets' },
+      { key: 'military', label: 'Military', icon: Shield, color: '#FF3D3D', colorClass: 'text-[#FF3D3D]', dotClass: 'bg-[#FF3D3D]', dataKey: 'military_flights' },
     ],
   },
   {
     label: 'MARITIME & SPACE',
     icon: Ship,
     color: '#00BCD4',
+    colorClass: 'text-[#00BCD4]',
     layers: [
-      { key: 'maritime', label: 'Maritime / Naval', icon: Ship, color: '#00BCD4', dataKey: 'maritime_ships' },
-      { key: 'satellites', label: 'Satellites', icon: Satellite, color: '#D4AF37', dataKey: 'satellites' },
+      { key: 'maritime', label: 'Maritime / Naval', icon: Ship, color: '#00BCD4', colorClass: 'text-[#00BCD4]', dotClass: 'bg-[#00BCD4]', dataKey: 'maritime_ships' },
+      { key: 'satellites', label: 'Satellites', icon: Satellite, color: '#D4AF37', colorClass: 'text-[var(--gold-primary)]', dotClass: 'bg-[var(--gold-primary)]', dataKey: 'satellites' },
     ],
   },
   {
     label: 'TRANSPORTATION & STREETS',
     icon: Navigation,
     color: '#FF6B00',
+    colorClass: 'text-[#FF6B00]',
     layers: [
-      { key: 'home_depot_stores', label: 'THD Stores', icon: Building2, color: '#FF6B00', dataKey: 'home_depot_stores' },
-      { key: 'delivery_routes', label: 'Delivery Routes', icon: Truck, color: '#FF8C00', dataKey: '' },
-      { key: 'home_depot_dcs', label: "THD DC's", icon: Building2, color: '#FF6B00', dataKey: 'home_depot_dcs' },
-      { key: 'home_depot_trucks', label: 'THD Carrier Trucks', icon: Building2, color: '#7C4DFF', dataKey: 'home_depot_trucks' },
-      { key: 'package_carriers', label: 'Package Carriers', icon: Truck, color: '#FFB300', dataKey: 'home_depot_trucks' },
+      { key: 'home_depot_stores', label: 'THD Stores', icon: Building2, color: '#FF6B00', colorClass: 'text-[#FF6B00]', dotClass: 'bg-[#FF6B00]', dataKey: 'home_depot_stores' },
+      { key: 'delivery_routes', label: 'Delivery Routes', icon: Truck, color: '#FF8C00', colorClass: 'text-[#FF8C00]', dotClass: 'bg-[#FF8C00]', dataKey: '' },
+      { key: 'home_depot_dcs', label: "THD DC's", icon: Building2, color: '#FF6B00', colorClass: 'text-[#FF6B00]', dotClass: 'bg-[#FF6B00]', dataKey: 'home_depot_dcs' },
+      { key: 'home_depot_trucks', label: 'THD Carrier Trucks', icon: Building2, color: '#7C4DFF', colorClass: 'text-[#7C4DFF]', dotClass: 'bg-[#7C4DFF]', dataKey: 'home_depot_trucks' },
+      { key: 'package_carriers', label: 'Package Carriers', icon: Truck, color: '#FFB300', colorClass: 'text-[#FFB300]', dotClass: 'bg-[#FFB300]', dataKey: 'home_depot_trucks' },
     ],
   },
   {
     label: 'SURVEILLANCE',
     icon: Camera,
     color: '#39FF14',
+    colorClass: 'text-[#39FF14]',
     layers: [
-      { key: 'cctv', label: 'CCTV Cameras', icon: Camera, color: '#39FF14', dataKey: 'cameras' },
-      { key: 'traffic_cameras', label: 'USA Traffic Cameras', icon: Navigation, color: '#FF8C00', dataKey: '' },
-      { key: 'live_news', label: 'Live News Feeds', icon: Tv, color: '#FF4081', dataKey: 'live_feeds' },
-      { key: 'news_intel', label: 'SIGINT News (RSS)', icon: Newspaper, color: '#D4AF37', dataKey: 'news' },
+      { key: 'cctv', label: 'CCTV Cameras', icon: Camera, color: '#39FF14', colorClass: 'text-[#39FF14]', dotClass: 'bg-[#39FF14]', dataKey: 'cameras' },
+      { key: 'traffic_cameras', label: 'USA Traffic Cameras', icon: Navigation, color: '#FF8C00', colorClass: 'text-[#FF8C00]', dotClass: 'bg-[#FF8C00]', dataKey: '' },
+      { key: 'live_news', label: 'Live News Feeds', icon: Tv, color: '#FF4081', colorClass: 'text-[#FF4081]', dotClass: 'bg-[#FF4081]', dataKey: 'live_feeds' },
+      { key: 'news_intel', label: 'SIGINT News (RSS)', icon: Newspaper, color: '#D4AF37', colorClass: 'text-[var(--gold-primary)]', dotClass: 'bg-[var(--gold-primary)]', dataKey: 'news' },
     ],
   },
   {
     label: 'NATURAL HAZARDS',
     icon: Activity,
     color: '#FF9500',
+    colorClass: 'text-[#FF9500]',
     layers: [
-      { key: 'earthquakes', label: 'Earthquakes (24h)', icon: Activity, color: '#FF9500', dataKey: 'earthquakes' },
-      { key: 'fires', label: 'Active Fires', icon: Flame, color: '#FF6B00', dataKey: 'fires' },
-      { key: 'weather', label: 'Severe Weather', icon: CloudLightning, color: '#E040FB', dataKey: 'weather_events' },
+      { key: 'earthquakes', label: 'Earthquakes (24h)', icon: Activity, color: '#FF9500', colorClass: 'text-[#FF9500]', dotClass: 'bg-[#FF9500]', dataKey: 'earthquakes' },
+      { key: 'fires', label: 'Active Fires', icon: Flame, color: '#FF6B00', colorClass: 'text-[#FF6B00]', dotClass: 'bg-[#FF6B00]', dataKey: 'fires' },
+      { key: 'weather', label: 'Severe Weather', icon: CloudLightning, color: '#E040FB', colorClass: 'text-[#E040FB]', dotClass: 'bg-[#E040FB]', dataKey: 'weather_events' },
+      { key: 'clouds', label: 'Cloud Layer', icon: CloudLightning, color: '#90CAF9', colorClass: 'text-[#90CAF9]', dotClass: 'bg-[#90CAF9]', dataKey: '' },
     ],
   },
   {
     label: 'THREATS & INFRA',
     icon: AlertTriangle,
     color: '#FF3D3D',
+    colorClass: 'text-[#FF3D3D]',
     layers: [
-      { key: 'infrastructure', label: 'Nuclear Facilities', icon: Radiation, color: '#76FF03', dataKey: 'infrastructure' },
-      { key: 'global_incidents', label: 'Global Incidents', icon: AlertTriangle, color: '#FF3D3D', dataKey: 'gdelt' },
-      { key: 'gps_jamming', label: 'GPS Jamming', icon: Radio, color: '#FF4444', dataKey: 'gps_jamming' },
+      { key: 'infrastructure', label: 'Nuclear Facilities', icon: Radiation, color: '#76FF03', colorClass: 'text-[#76FF03]', dotClass: 'bg-[#76FF03]', dataKey: 'infrastructure' },
+      { key: 'global_incidents', label: 'Global Incidents', icon: AlertTriangle, color: '#FF3D3D', colorClass: 'text-[#FF3D3D]', dotClass: 'bg-[#FF3D3D]', dataKey: 'gdelt' },
+      { key: 'gps_jamming', label: 'GPS Jamming', icon: Radio, color: '#FF4444', colorClass: 'text-[#FF4444]', dotClass: 'bg-[#FF4444]', dataKey: 'gps_jamming' },
     ],
   },
   {
     label: 'DISPLAY',
     icon: Sun,
     color: '#448AFF',
+    colorClass: 'text-[#448AFF]',
     layers: [
-      { key: 'day_night', label: 'Day / Night Cycle', icon: Sun, color: '#448AFF', dataKey: '' },
+      { key: 'day_night', label: 'Day / Night Cycle', icon: Sun, color: '#448AFF', colorClass: 'text-[#448AFF]', dotClass: 'bg-[#448AFF]', dataKey: '' },
     ],
   },
 ];
@@ -133,10 +141,10 @@ function LayerPanel({ data, activeLayers, setActiveLayers }: LayerPanelProps) {
           <span className="hud-text text-[12px] text-[var(--text-primary)] tracking-widest">DATA LAYERS</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <span className={`gotham-tag ${activeCount > 10 ? 'gotham-tag--critical' : activeCount > 5 ? 'gotham-tag--high' : 'gotham-tag--low'}`} style={{ fontSize: '8px', padding: '1px 6px' }}>
+          <span className={`gotham-tag ${activeCount > 10 ? 'gotham-tag--critical' : activeCount > 5 ? 'gotham-tag--high' : 'gotham-tag--low'} text-[8px] px-1.5 py-[1px]`}>
             {activeCount}/{ALL_LAYERS.length}
           </span>
-          <span className="gotham-tag gotham-tag--info" style={{ fontSize: '7px', padding: '1px 5px' }}>{totalEntities.toLocaleString()} ENT</span>
+          <span className="gotham-tag gotham-tag--info text-[7px] px-1.25 py-[1px]">{totalEntities.toLocaleString()} ENT</span>
         </div>
       </div>
 
@@ -156,9 +164,9 @@ function LayerPanel({ data, activeLayers, setActiveLayers }: LayerPanelProps) {
                   onClick={() => toggleGroup(group.label)}
                   className="flex-1 flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-white/[0.03] transition-colors"
                 >
-                  <GroupIcon className="w-3 h-3 flex-shrink-0" style={{ color: group.color }} />
+                  <GroupIcon className={`w-3 h-3 flex-shrink-0 ${group.colorClass}`} />
                   <span className="text-[9px] font-mono tracking-[0.15em] text-[var(--text-secondary)] font-bold flex-1 text-left">{group.label}</span>
-                  <span className="text-[8px] font-mono tabular-nums" style={{ color: groupActiveCount > 0 ? group.color : 'var(--text-muted)' }}>
+                  <span className={`text-[8px] font-mono tabular-nums ${groupActiveCount > 0 ? group.colorClass : 'text-[var(--text-muted)]'}`}>
                     {groupActiveCount}/{group.layers.length}
                   </span>
                   {isExpanded ? (
@@ -174,7 +182,7 @@ function LayerPanel({ data, activeLayers, setActiveLayers }: LayerPanelProps) {
                   title={allActive ? 'Disable all' : 'Enable all'}
                 >
                   {allActive ? (
-                    <ToggleRight className="w-3.5 h-3.5" style={{ color: group.color }} />
+                    <ToggleRight className={`w-3.5 h-3.5 ${group.colorClass}`} />
                   ) : (
                     <ToggleLeft className="w-3.5 h-3.5 text-[var(--text-muted)]" />
                   )}
@@ -208,15 +216,10 @@ function LayerPanel({ data, activeLayers, setActiveLayers }: LayerPanelProps) {
                           >
                             {/* Color dot indicator */}
                             <div
-                              className={`w-1.5 h-1.5 rounded-full flex-shrink-0 transition-all duration-300 ${isActive ? 'scale-100' : 'scale-50 opacity-30'}`}
-                              style={{
-                                backgroundColor: layer.color,
-                                boxShadow: isActive ? `0 0 6px ${layer.color}60` : 'none',
-                              }}
+                              className={`w-1.5 h-1.5 rounded-full flex-shrink-0 transition-all duration-300 ${isActive ? 'scale-100' : 'scale-50 opacity-30'} ${layer.dotClass}`}
                             />
                             <Icon
-                              className="w-3.5 h-3.5 flex-shrink-0 transition-colors duration-200"
-                              style={{ color: isActive ? layer.color : 'var(--text-muted)' }}
+                              className={`w-3.5 h-3.5 flex-shrink-0 transition-colors duration-200 ${isActive ? layer.colorClass : 'text-[var(--text-muted)]'}`}
                             />
                             <span className={`text-[11px] font-mono tracking-wide flex-1 text-left transition-colors duration-200 ${
                               isActive ? 'text-[var(--text-primary)]' : 'text-[var(--text-muted)] group-hover:text-[var(--text-secondary)]'
@@ -225,8 +228,7 @@ function LayerPanel({ data, activeLayers, setActiveLayers }: LayerPanelProps) {
                             </span>
                             {count !== null && (
                               <span
-                                className="text-[9px] font-mono tabular-nums font-bold transition-colors duration-200"
-                                style={{ color: isActive ? layer.color : 'var(--text-muted)' }}
+                                className={`text-[9px] font-mono tabular-nums font-bold transition-colors duration-200 ${isActive ? layer.colorClass : 'text-[var(--text-muted)]'}`}
                               >
                                 {count.toLocaleString()}
                               </span>
