@@ -173,6 +173,7 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
         tileSize: 256,
         maxzoom: 9,
       });
+      map.addSource('clouds-storms', { type: 'geojson', data: EMPTY_FC });
       map.on('error', (e) => {
         console.warn('[OSIRIS] Map error:', (e && (e as any).error) || e);
       });
@@ -250,6 +251,25 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
       // Day/Night
       map.addLayer({ id: 'day-night-fill', type: 'fill', source: 'day-night', paint: { 'fill-color': '#000022', 'fill-opacity': 0.35 }});
       map.addLayer({ id: 'clouds-layer', type: 'raster', source: 'clouds', paint: { 'raster-opacity': 0.55 } }, 'day-night-fill');
+      map.addLayer({ id: 'clouds-storms-circle', type: 'circle', source: 'clouds-storms', paint: {
+        'circle-radius': ['interpolate',['linear'],['zoom'], 1,5, 5,8, 10,12],
+        'circle-color': '#E040FB',
+        'circle-opacity': 0.9,
+        'circle-stroke-width': 1.5,
+        'circle-stroke-color': '#FFFFFF',
+      }});
+      map.addLayer({ id: 'clouds-storms-label', type: 'symbol', source: 'clouds-storms', minzoom: 6, layout: {
+        'text-field': ['get','type'],
+        'text-size': 10,
+        'text-font': ['Open Sans Regular'],
+        'text-offset': [0, 1.2],
+        'text-allow-overlap': false,
+      }, paint: {
+        'text-color': '#E040FB',
+        'text-halo-color': '#000000',
+        'text-halo-width': 1,
+        'text-opacity': 0.85,
+      }});
 
       // Earthquakes
       map.addLayer({ id: 'eq-circles', type: 'circle', source: 'earthquakes', paint: {
@@ -1125,7 +1145,8 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
   useEffect(() => {
     if (!mapReady) return;
     setGeo('weather', activeLayers.weather && data.weather_events ? data.weather_events.map((w: any) => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [w.lng, w.lat] }, properties: { title: w.title, type: w.type, icon: w.icon, severity: w.severity, source: w.source, id: w.id } })) : []);
-  }, [mapReady, data.weather_events, activeLayers.weather, setGeo]);
+    setGeo('clouds-storms', activeLayers.clouds && data.weather_events ? data.weather_events.map((w: any) => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [w.lng, w.lat] }, properties: { title: w.title, type: w.type, icon: w.icon, severity: w.severity, source: w.source, id: w.id } })) : []);
+  }, [mapReady, data.weather_events, activeLayers.weather, activeLayers.clouds, setGeo]);
 
   useEffect(() => {
     if (!mapReady) return;
@@ -1419,7 +1440,7 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
     setVis(['delivery-routes-line','delivery-routes-stops','delivery-routes-label'], activeLayers.delivery_routes);
     setVis(['fires-heat'], activeLayers.fires);
     setVis(['weather-glow','weather-dots','weather-label'], activeLayers.weather);
-    setVis(['clouds-layer'], activeLayers.clouds);
+    setVis(['clouds-layer','clouds-storms-circle','clouds-storms-label'], activeLayers.clouds);
     setVis(['infra-glow','infra-dots','infra-label'], activeLayers.infrastructure);
     setVis(['maritime-glow','maritime-dots','maritime-label'], activeLayers.maritime);
     setVis(['choke-glow','choke-dots','choke-label'], activeLayers.maritime);
