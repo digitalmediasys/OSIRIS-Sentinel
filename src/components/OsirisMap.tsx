@@ -1173,61 +1173,93 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
   useEffect(() => {
     if (!mapReady) return;
 
-    const routeCoords: [number, number][] = [
-      [-83.1695021, 42.4285517], // THD Store 1639 (Detroit)
-      [-83.1260, 42.3955],       // Stop 1
-      [-83.0730, 42.3561],       // Stop 2
-      [-83.0484, 42.3355],       // Greektown, Detroit
-    ];
+    const buildPoint = (coordinates: [number, number], label: string) => ({
+      type: 'Feature' as const,
+      geometry: { type: 'Point' as const, coordinates },
+      properties: { label },
+    });
 
-    const pointFeatures = [
+    const buildLine = (coordinates: [number, number][], label: string) => ({
+      type: 'Feature' as const,
+      geometry: { type: 'LineString' as const, coordinates },
+      properties: { label },
+    });
+
+    const examples = [
       {
-        type: 'Feature' as const,
-        geometry: { type: 'Point' as const, coordinates: routeCoords[0] },
-        properties: { label: 'THD Store 1639' },
+        id: 'detroit-greektown',
+        label: 'THD 1639 → Greektown Detroit',
+        stops: [
+          [-83.1695021, 42.4285517],
+          [-83.1260, 42.3955],
+          [-83.0730, 42.3561],
+          [-83.0484, 42.3355],
+        ],
       },
       {
-        type: 'Feature' as const,
-        geometry: { type: 'Point' as const, coordinates: routeCoords[1] },
-        properties: { label: 'Stop 1' },
+        id: 'la-phoenix',
+        label: 'Los Angeles → Phoenix',
+        stops: [
+          [-118.2437, 34.0522],
+          [-115.1398, 36.1699],
+          [-112.0740, 33.4484],
+        ],
       },
       {
-        type: 'Feature' as const,
-        geometry: { type: 'Point' as const, coordinates: routeCoords[2] },
-        properties: { label: 'Stop 2' },
+        id: 'chicago-indy',
+        label: 'Chicago → Indianapolis',
+        stops: [
+          [-87.6298, 41.8781],
+          [-86.1581, 39.7684],
+        ],
       },
       {
-        type: 'Feature' as const,
-        geometry: { type: 'Point' as const, coordinates: routeCoords[3] },
-        properties: { label: 'Greektown' },
+        id: 'atlanta-charlotte',
+        label: 'Atlanta → Charlotte',
+        stops: [
+          [-84.3880, 33.7490],
+          [-80.8431, 35.2271],
+        ],
+      },
+      {
+        id: 'seattle-boise',
+        label: 'Seattle → Boise',
+        stops: [
+          [-122.3321, 47.6062],
+          [-116.2023, 43.6150],
+        ],
       },
     ];
 
     const routeSourceFeatures = async () => {
-      const coordinatesParam = routeCoords.map(([lng, lat]) => `${lng},${lat}`).join(';');
-      const url = `https://router.project-osrm.org/route/v1/driving/${coordinatesParam}?overview=full&geometries=geojson&steps=false&annotations=false`;
-      try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`OSRM request failed: ${response.status}`);
-        const json = await response.json();
-        const osrmCoords = json.routes?.[0]?.geometry?.coordinates;
-        const lineFeature = {
-          type: 'Feature' as const,
-          geometry: { type: 'LineString' as const, coordinates: Array.isArray(osrmCoords) && osrmCoords.length ? osrmCoords : routeCoords },
-          properties: { label: 'THD 1639 → Greektown' },
-        };
-        setGeo('delivery-routes', [lineFeature, ...pointFeatures]);
-      } catch (error) {
-        console.warn('[OSIRIS] Delivery route OSRM fetch failed, falling back to straight line', error);
-        setGeo('delivery-routes', [
-          {
-            type: 'Feature' as const,
-            geometry: { type: 'LineString' as const, coordinates: routeCoords },
-            properties: { label: 'THD 1639 → Greektown' },
-          },
-          ...pointFeatures,
-        ]);
-      }
+      const lineFeatures = await Promise.all(examples.map(async (route) => {
+        const coordinatesParam = route.stops.map(([lng, lat]) => `${lng},${lat}`).join(';');
+        const url = `https://router.project-osrm.org/route/v1/driving/${coordinatesParam}?overview=full&geometries=geojson&steps=false&annotations=false`;
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`OSRM request failed: ${response.status}`);
+          const json = await response.json();
+          const osrmCoords = json.routes?.[0]?.geometry?.coordinates;
+          return buildLine(Array.isArray(osrmCoords) && osrmCoords.length ? osrmCoords : route.stops, route.label);
+        } catch (error) {
+          console.warn('[OSIRIS] Delivery route OSRM fetch failed for', route.label, error);
+          return buildLine(route.stops, route.label);
+        }
+      }));
+
+      const pointFeatures = examples.flatMap((route) =>
+        route.stops.map((coords, idx) => {
+          const labelParts = route.label.split(' → ');
+          const label = idx === 0
+            ? `${labelParts[0]} start`
+            : idx === route.stops.length - 1
+              ? `${labelParts[1]} end`
+              : `Stop ${idx}`;
+          return buildPoint(coords, label);
+        })
+      );
+
+      setGeo('delivery-routes', [...lineFeatures, ...pointFeatures]);
     };
 
     if (activeLayers.delivery_routes) {
