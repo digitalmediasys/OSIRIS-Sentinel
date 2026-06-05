@@ -366,7 +366,8 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
         'icon-opacity': 1,
       }});
       map.addLayer({ id: 'home-depot-dcs-label', type: 'symbol', source: 'home-depot-dcs', minzoom: 9, layout: {
-        'text-field': ['to-string', ['get', 'index']],
+        // Show a clear label for distribution centers with 'FDC: <name/address>'
+        'text-field': ['concat', 'FDC: ', ['get', 'name']],
         'text-size': 10,
         'text-font': ['Open Sans Bold'],
         'text-offset': [0, 0.8],

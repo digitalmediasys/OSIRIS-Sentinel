@@ -804,4 +804,12 @@
     "lat": 40.2993704,
     "lng": -74.4944272
   }
+  ,
+  {
+    "index": 117,
+    "status": "OK",
+    "address": "6770 Stonecrest Industrial Way, Stonecrest, GA 30058",
+    "lat": 33.6375,
+    "lng": -84.1380
+  }
 ]
